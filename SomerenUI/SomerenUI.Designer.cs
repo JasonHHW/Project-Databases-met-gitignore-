@@ -146,39 +146,44 @@
             // dashboardToolStripMenuItem1
             // 
             dashboardToolStripMenuItem1.Name = "dashboardToolStripMenuItem1";
-            dashboardToolStripMenuItem1.Size = new System.Drawing.Size(131, 22);
+            dashboardToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             dashboardToolStripMenuItem1.Text = "Dashboard";
+            dashboardToolStripMenuItem1.Click += dashboardToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // studentsToolStripMenuItem
             // 
             studentsToolStripMenuItem.Name = "studentsToolStripMenuItem";
             studentsToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
             studentsToolStripMenuItem.Text = "Studenten";
+            studentsToolStripMenuItem.Click += studentsToolStripMenuItem_Click;
             // 
             // lecturersToolStripMenuItem
             // 
             lecturersToolStripMenuItem.Name = "lecturersToolStripMenuItem";
             lecturersToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             lecturersToolStripMenuItem.Text = "Docenten";
+            lecturersToolStripMenuItem.Click += lecturersToolStripMenuItem_Click;
             // 
             // activitiesToolStripMenuItem
             // 
             activitiesToolStripMenuItem.Name = "activitiesToolStripMenuItem";
             activitiesToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             activitiesToolStripMenuItem.Text = "Activiteiten";
-            activitiesToolStripMenuItem.Click += activitiesToolStripMenuItem_Click_1;
+            activitiesToolStripMenuItem.Click += activitiesToolStripMenuItem_Click;
             // 
             // roomsToolStripMenuItem
             // 
             roomsToolStripMenuItem.Name = "roomsToolStripMenuItem";
             roomsToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             roomsToolStripMenuItem.Text = "Kamers";
+            roomsToolStripMenuItem.Click += roomsToolStripMenuItem_Click;
             // 
             // drankToolStripMenuItem
             // 
@@ -190,25 +195,27 @@
             // drankVoorraadToolStripMenuItem
             // 
             drankVoorraadToolStripMenuItem.Name = "drankVoorraadToolStripMenuItem";
-            drankVoorraadToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            drankVoorraadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             drankVoorraadToolStripMenuItem.Text = "Voorraad";
             // 
             // drankBestellingenToolStripMenuItem
             // 
             drankBestellingenToolStripMenuItem.Name = "drankBestellingenToolStripMenuItem";
-            drankBestellingenToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            drankBestellingenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             drankBestellingenToolStripMenuItem.Text = "Bestellingen";
+            drankBestellingenToolStripMenuItem.Click += drankBestellingenToolStripMenuItem_Click;
             // 
             // omzetToolStripMenuItem
             // 
             omzetToolStripMenuItem.Name = "omzetToolStripMenuItem";
-            omzetToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            omzetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             omzetToolStripMenuItem.Text = "Omzet";
+            omzetToolStripMenuItem.Click += omzetToolStripMenuItem_Click;
             // 
             // vatToolStripMenuItem
             // 
             vatToolStripMenuItem.Name = "vatToolStripMenuItem";
-            vatToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            vatToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             vatToolStripMenuItem.Text = "VAT";
             // 
             // pnlDashboard
@@ -243,9 +250,9 @@
             pnlDrankBestellingen.Controls.Add(listViewBestellingenStudenten);
             pnlDrankBestellingen.Controls.Add(pictureBox6);
             pnlDrankBestellingen.Controls.Add(lblDrankBestellingen);
-            pnlDrankBestellingen.Location = new System.Drawing.Point(318, 171);
+            pnlDrankBestellingen.Location = new System.Drawing.Point(77, 31);
             pnlDrankBestellingen.Name = "pnlDrankBestellingen";
-            pnlDrankBestellingen.Size = new System.Drawing.Size(95, 86);
+            pnlDrankBestellingen.Size = new System.Drawing.Size(828, 432);
             pnlDrankBestellingen.TabIndex = 6;
             pnlDrankBestellingen.Visible = false;
             // 
@@ -258,6 +265,7 @@
             bttnPlaatsBestelling.TabIndex = 14;
             bttnPlaatsBestelling.Text = "Plaats bestelling";
             bttnPlaatsBestelling.UseVisualStyleBackColor = true;
+            bttnPlaatsBestelling.Click += bttnPlaatsBestelling_Click;
             // 
             // bttnResetBestelling
             // 
@@ -268,6 +276,7 @@
             bttnResetBestelling.TabIndex = 13;
             bttnResetBestelling.Text = "Reset";
             bttnResetBestelling.UseVisualStyleBackColor = true;
+            bttnResetBestelling.Click += bttnResetBestelling_Click;
             // 
             // lblNaamBesteller
             // 
@@ -358,6 +367,7 @@
             bttnOrder.TabIndex = 5;
             bttnOrder.Text = "Voeg toe";
             bttnOrder.UseVisualStyleBackColor = true;
+            bttnOrder.Click += button1_Click;
             // 
             // listViewBestellingenDrankjes
             // 
@@ -371,6 +381,7 @@
             listViewBestellingenDrankjes.TabIndex = 4;
             listViewBestellingenDrankjes.UseCompatibleStateImageBehavior = false;
             listViewBestellingenDrankjes.View = System.Windows.Forms.View.Details;
+            listViewBestellingenDrankjes.SelectedIndexChanged += listViewBestellingenDrankjes_SelectedIndexChanged;
             // 
             // kolomDrankNaam
             // 

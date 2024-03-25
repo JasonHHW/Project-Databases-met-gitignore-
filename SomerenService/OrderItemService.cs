@@ -30,9 +30,9 @@ namespace SomerenService
             return orderItemDao.GetAllOrderItems();
         }
 
-        public List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)
+        public int CountOrderItemsByDate(DateTime start, DateTime end)
         {
-            return orderItemDao.GetOrderItemsByOrderDate(start, end);
+            return orderItemDao.CountOrderItemsByOrderDate(start, end);
         }
 
     }

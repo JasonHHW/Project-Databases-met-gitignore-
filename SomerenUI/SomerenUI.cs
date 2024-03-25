@@ -150,12 +150,10 @@ namespace SomerenUI
             List<Drank> drankjes = drankService.GetDrankjes();
             return drankjes;
         }
-        private List<OrderItem> GetOmzetItems()
+        private int GetOmzetTotalDrankjes()
         {
             OrderItemService orderItemService = new OrderItemService();
-            List<OrderItem> orderItems = orderItemService.GetOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
-
-            return orderItems;
+            return orderItemService.CountOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
         }
 
         public int GetAmountOfStudentsWithOrders()
@@ -337,19 +335,12 @@ namespace SomerenUI
         private void DisplayOmzet()
         {
             listViewDrankOmzet.Items.Clear();
-
-            List<OrderItem> orderItems = GetOmzetItems();
             int studentsOrdered = GetAmountOfStudentsWithOrders();
             double price = 2.00;
-            int totalDrinksSold = 0;
-            double turnover = 0.00;
-            foreach (OrderItem orderItem in orderItems)
-            {
-                totalDrinksSold += orderItem.Aantal;
-                turnover += orderItem.Aantal * price;
-            }
+            int totalDrinksSold = GetOmzetTotalDrankjes();
+            double turnover = totalDrinksSold * price;
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
-            li.SubItems.Add("� " + String.Format("{0,00}", turnover));
+            li.SubItems.Add("$ " + String.Format("{0,00}", turnover));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
             listViewDrankOmzet.Items.Add(li);
         }
@@ -565,7 +556,7 @@ namespace SomerenUI
             }
         }
 
-        private void activitiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void listViewBestellingenDrankjes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

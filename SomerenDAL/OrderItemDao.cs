@@ -71,6 +71,23 @@ namespace SomerenDAL
             }
             return orderItems;
         }
+
+        public int ReadTotalDrinks(DataTable dataTable)
+        {
+            int totalDrinks = 0;
+            foreach (DataRow dr in dataTable.Rows)
+            {
+                totalDrinks += (int)dr["Aantal"];
+            }
+            if (totalDrinks > 0)
+            {
+                return totalDrinks;
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
         public int ReadTablesforint(DataTable dataTable)
         {
             
@@ -81,15 +98,15 @@ namespace SomerenDAL
          
         }
 
-        public List<OrderItem> GetOrderItemsByOrderDate(DateTime start, DateTime end)
+        public int CountOrderItemsByOrderDate(DateTime start, DateTime end)
         {
-            string query = "SELECT * FROM [OrderItem] JOIN [Bestelling] ON Bestelling.BestellingId = OrderItem.BestellingId WHERE [BestelDatum] >= @start AND [BestelDatum] <= @eind";
+            string query = "SELECT SUM([Aantal]) AS [Aantal] FROM [OrderItem] JOIN [Bestelling] ON Bestelling.BestellingId = OrderItem.BestellingId WHERE [BestelDatum] BETWEEN @start AND @eind";
             SqlParameter[] sqlParameters = new SqlParameter[2];
             sqlParameters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParameters[1] = new SqlParameter("@eind", SqlDbType.DateTime);
             sqlParameters[0].Value = start;
             sqlParameters[1].Value = end.AddHours(23).AddMinutes(59).AddSeconds(59);
-            return ReadTables(ExecuteSelectQuery(query, sqlParameters));
+            return ReadTotalDrinks(ExecuteSelectQuery(query, sqlParameters));
         }
 
         
