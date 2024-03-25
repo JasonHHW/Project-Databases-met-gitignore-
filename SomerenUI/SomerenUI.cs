@@ -63,7 +63,7 @@ namespace SomerenUI
         private void ShowKamersPanel()
         {
             Methodes.ShowPanel(pnlKamers);
-           
+
             try
             {
                 // get and display all students
@@ -102,7 +102,7 @@ namespace SomerenUI
         private void ShowTeachersPanel()
         {
             Methodes.ShowPanel(pnlDocenten);
-        
+
             try
             {
                 // get and display all students
@@ -254,11 +254,11 @@ namespace SomerenUI
         private void UpdateBestelling(ListViewItem selectedDrink)
         {
             bool newdrink = true;
-            
+
 
             if (int.TryParse(textBoxHoeveelheidDrank.Text, out int aantalDrank) && aantalDrank > 0)
-            { 
-                
+            {
+
                 decimal prijs = aantalDrank * decimal.Parse(Regex.Replace(selectedDrink.SubItems[1].Text, @"[^\d,]", ""));
                 decimal totaal = decimal.Parse(Regex.Replace(labelPrijs.Text, @"[^\d,]", "")) + prijs;
                 int totaalaantalDrank = 0;
@@ -268,14 +268,14 @@ namespace SomerenUI
 
                     {
                         OrderItem orderItem = (OrderItem)listItem.Tag;
-                        
+
 
                         newdrink = false;
                         totaalaantalDrank = int.Parse(listItem.SubItems[1].Text) + aantalDrank;
-                        orderItem.Aantal=totaalaantalDrank;
+                        orderItem.Aantal = totaalaantalDrank;
 
                         listItem.SubItems[1].Text = totaalaantalDrank.ToString();
-                        listItem.SubItems[2].Text = (decimal.Parse(Regex.Replace(listItem.SubItems[2].Text, @"[^\d,]", "")) +  prijs).ToString("C");
+                        listItem.SubItems[2].Text = (decimal.Parse(Regex.Replace(listItem.SubItems[2].Text, @"[^\d,]", "")) + prijs).ToString("C");
                     }
                 }
 
@@ -289,14 +289,14 @@ namespace SomerenUI
                     orderItem.Aantal = aantalDrank;
                     //orderItem.prijs = decimal.Parse(Regex.Replace(selectedDrink.SubItems[1].Text, @"[^\d,]", ""));
                     //orderItem.ItemId =
-                   // orderItem.BestellingId = maxbestellingid in database + 1
+                    // orderItem.BestellingId = maxbestellingid in database + 1
 
                     ListViewItem li = new ListViewItem(selectedDrink.SubItems[0].Text);
-                 
+
                     li.SubItems.Add(aantalDrank.ToString());
                     li.SubItems.Add(prijs.ToString("C"));
                     li.Tag = orderItem;
-                  
+
                     listViewTotaalBesteld.Items.Add(li);
                 }
 
@@ -310,7 +310,7 @@ namespace SomerenUI
         private void DisplayTotaalBesteld()
         {
 
-           
+
 
             ListViewItem selectedStudent = new ListViewItem();
             ListViewItem selectedDrink = new ListViewItem();
@@ -332,7 +332,7 @@ namespace SomerenUI
             listViewTotaalBesteld.Items.Clear();
             textBoxHoeveelheidDrank.Text = "";
             labelPrijs.Text = "$0,00";
-        }   
+        }
 
         private void DisplayOmzet()
         {
@@ -427,18 +427,18 @@ namespace SomerenUI
         }
         private void tagging()
         {
-         //   foreach (OrderItem item in listViewTotaalBesteld) ;
-        
+            //   foreach (OrderItem item in listViewTotaalBesteld) ;
+
         }
         private bool checkstock()
-        { 
+        {
             bool erisgenoeg = true;
 
             foreach (ListViewItem orderItem in listViewTotaalBesteld.Items)
             {
                 string dranknaam = orderItem.SubItems[0].Text;
                 int hoeveelheidbesteld = int.Parse(orderItem.SubItems[1].Text);
-                
+
                 foreach (ListViewItem drinkItem in listViewBestellingenDrankjes.Items)
                 {
                     if (drinkItem.SubItems[0].Text == dranknaam)
@@ -451,9 +451,9 @@ namespace SomerenUI
                             MessageBox.Show($"Er is niet genoeg {dranknaam} over, we hebben nog maar {aantaldrankover} ");
                             erisgenoeg = false;
                         }
-                       
+
                         break;
-                        
+
                     }
 
 
@@ -468,11 +468,11 @@ namespace SomerenUI
 
         private void bttnPlaatsBestelling_Click(object sender, EventArgs e)
         {
-            if (listViewBestellingenStudenten.SelectedItems.Count == 1 && listViewTotaalBesteld.Items.Count!=0)
+            if (listViewBestellingenStudenten.SelectedItems.Count == 1 && listViewTotaalBesteld.Items.Count != 0)
             {
                 Student selectedStudent = (Student)listViewBestellingenStudenten.SelectedItems[0].Tag;
                 string voornaam = selectedStudent.Voornaam;
-                
+
                 DateTime tijdvanbestelling = DateTime.Now;
                 if (checkstock())
                 {
@@ -501,27 +501,28 @@ namespace SomerenUI
                             orderitem.BestellingId = newBestellingId;
                             orderItems.Add(orderitem);
                             MessageBox.Show(orderitem.ToString());
-                           orderItemService.AddOrderItem(orderitem);
+                            orderItemService.AddOrderItem(orderitem);
                         }
                         ResetBestelling();
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
                         ShowDrankBestellingenPanel();
-                        
+
                     }
                     else
                     {
 
                     }
 
-                } else { }
+                }
+                else { }
 
             }
             else { MessageBox.Show("Selecteer alstublieft op wiens naam de bestelling is en voeg een drankje toe"); }
-           
+
         }
-        
+
         private void dtpDrankOmzetEind_ValueChanged(object sender, EventArgs e)
         {
             if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
@@ -552,7 +553,8 @@ namespace SomerenUI
             {
                 MessageBox.Show("Start date can not be set after the current date");
                 dtpDrankOmzetStart.Value = DateTime.Now;
-            } else if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
+            }
+            else if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
             {
                 MessageBox.Show("Start date can not be set after the end date");
                 dtpDrankOmzetStart.Value = dtpDrankOmzetEind.Value;
@@ -563,5 +565,9 @@ namespace SomerenUI
             }
         }
 
+        private void activitiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
