@@ -190,7 +190,6 @@
             drankToolStripMenuItem.Name = "drankToolStripMenuItem";
             drankToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             drankToolStripMenuItem.Text = "Drank";
-            drankToolStripMenuItem.Click += drankToolStripMenuItem_Click;
             // 
             // drankVoorraadToolStripMenuItem
             // 
@@ -261,7 +260,6 @@
             listViewDrankOmzet.TabIndex = 7;
             listViewDrankOmzet.UseCompatibleStateImageBehavior = false;
             listViewDrankOmzet.View = System.Windows.Forms.View.Details;
-            listViewDrankOmzet.SelectedIndexChanged += listViewDrankOmzet_SelectedIndexChanged;
             // 
             // Sales
             // 
