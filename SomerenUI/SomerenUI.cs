@@ -502,7 +502,7 @@ namespace SomerenUI
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
-                      
+
                         List<Drank> drankjes = GetDrankjes();
                         DisplayDrankjes(drankjes);
 
