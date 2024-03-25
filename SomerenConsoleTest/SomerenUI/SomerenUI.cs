@@ -14,7 +14,7 @@ namespace SomerenUI
 {
     public partial class SomerenUI : Form
     {
-
+        Kamer kamer { get; set; }
         public SomerenUI()
         {
             InitializeComponent();
@@ -25,6 +25,7 @@ namespace SomerenUI
 
             Methodes.ShowPanel(pnlDashboard);
         }
+
         private void ShowStudentsPanel()
         {
 
@@ -405,6 +406,11 @@ namespace SomerenUI
 
 
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DisplayTotaalBesteld();
+        }
+
         private void listViewBestellingenStudenten_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             ResetBestelling();
@@ -502,10 +508,7 @@ namespace SomerenUI
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
-                      
-                        List<Drank> drankjes = GetDrankjes();
-                        DisplayDrankjes(drankjes);
-
+                        ShowDrankBestellingenPanel();
 
                     }
                     else
@@ -563,7 +566,25 @@ namespace SomerenUI
             }
         }
 
+        private void activitiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
 
+        }
+
+        private void studentsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lecturersToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowTeachersPanel();
+        }
+
+        private void roomsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowKamersPanel();
+        }
 
         private void drankToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -575,12 +596,19 @@ namespace SomerenUI
 
         }
 
+        private void drankBestellingenToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowDrankBestellingenPanel();
+        }
 
-
+        private void omzetToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowOmzetPanel();
+        }
 
         private void bttnOrder_Click(object sender, EventArgs e)
         {
-            DisplayTotaalBesteld();
+
         }
     }
 }
