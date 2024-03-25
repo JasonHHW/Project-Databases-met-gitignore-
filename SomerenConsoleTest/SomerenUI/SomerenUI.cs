@@ -14,7 +14,7 @@ namespace SomerenUI
 {
     public partial class SomerenUI : Form
     {
-
+        Kamer kamer { get; set; }
         public SomerenUI()
         {
             InitializeComponent();
@@ -25,6 +25,7 @@ namespace SomerenUI
 
             Methodes.ShowPanel(pnlDashboard);
         }
+
         private void ShowStudentsPanel()
         {
 
@@ -149,10 +150,12 @@ namespace SomerenUI
             List<Drank> drankjes = drankService.GetDrankjes();
             return drankjes;
         }
-        private int GetOmzetTotalDrankjes()
+        private List<OrderItem> GetOmzetItems()
         {
             OrderItemService orderItemService = new OrderItemService();
-            return orderItemService.CountOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
+            List<OrderItem> orderItems = orderItemService.GetOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
+
+            return orderItems;
         }
 
         public int GetAmountOfStudentsWithOrders()
@@ -334,10 +337,17 @@ namespace SomerenUI
         private void DisplayOmzet()
         {
             listViewDrankOmzet.Items.Clear();
+
+            List<OrderItem> orderItems = GetOmzetItems();
             int studentsOrdered = GetAmountOfStudentsWithOrders();
             double price = 2.00;
-            int totalDrinksSold = GetOmzetTotalDrankjes();
-            double turnover = totalDrinksSold * price;
+            int totalDrinksSold = 0;
+            double turnover = 0.00;
+            foreach (OrderItem orderItem in orderItems)
+            {
+                totalDrinksSold += orderItem.Aantal;
+                turnover += orderItem.Aantal * price;
+            }
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
             li.SubItems.Add("$ " + String.Format("{0,00}", turnover));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
@@ -395,6 +405,11 @@ namespace SomerenUI
 
 
 
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DisplayTotaalBesteld();
+        }
 
         private void listViewBestellingenStudenten_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -493,10 +508,7 @@ namespace SomerenUI
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
-
-                        List<Drank> drankjes = GetDrankjes();
-                        DisplayDrankjes(drankjes);
-
+                        ShowDrankBestellingenPanel();
 
                     }
                     else
@@ -554,7 +566,27 @@ namespace SomerenUI
             }
         }
 
-        private void listViewBestellingenDrankjes_SelectedIndexChanged(object sender, EventArgs e)
+        private void activitiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void studentsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lecturersToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowTeachersPanel();
+        }
+
+        private void roomsToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowKamersPanel();
+        }
+
+        private void drankToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
@@ -564,12 +596,19 @@ namespace SomerenUI
 
         }
 
+        private void drankBestellingenToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowDrankBestellingenPanel();
+        }
 
-
+        private void omzetToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            ShowOmzetPanel();
+        }
 
         private void bttnOrder_Click(object sender, EventArgs e)
         {
-            DisplayTotaalBesteld();
+
         }
     }
 }
