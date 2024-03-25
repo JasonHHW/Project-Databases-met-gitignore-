@@ -24,41 +24,12 @@ namespace SomerenUI
         {
 
             Methodes.ShowPanel(pnlDashboard);
-
-        private void HideAllPanels() // Deze methode zet de visibility van alle pannels in de UI op false
-        {
-            pnlStudents.Hide();
-            pnlDocenten.Hide();
-            pnlActviteiten.Hide();
-            pnlKamers.Hide();
-            pnlDrankBestellingen.Hide();
-            pnlDrankOmzet.Hide();
-            pnlDrankVAT.Hide();
-            pnlDrankVoorrraad.Hide();
-        }
-        private void ShowDashboardPanel()
-        {
-            // hide all other panels
-            HideAllPanels();
-
-            // show dashboard
-            pnlDashboard.Show();
         }
 
         private void ShowStudentsPanel()
         {
 
             Methodes.ShowPanel(pnlStudents);
-            // hide all other panels
-            //pnlDashboard.Hide();
-
-            HideAllPanels();
-
-            // show students
-            pnlStudents.BringToFront();
-            pnlStudents.Dock = DockStyle.Fill;
-
-            pnlStudents.Show();
 
             try
             {
@@ -76,14 +47,6 @@ namespace SomerenUI
         private void ShowActiviteitenPanel()
         {
             Methodes.ShowPanel(pnlActviteiten);
-        
-            // hide all other panels
-            HideAllPanels();
-            pnlActviteiten.BringToFront();
-            pnlActviteiten.Dock = DockStyle.Fill;
-
-            pnlActviteiten.Show();
-
 
             try
             {
@@ -100,13 +63,7 @@ namespace SomerenUI
         private void ShowKamersPanel()
         {
             Methodes.ShowPanel(pnlKamers);
-            HideAllPanels();
-            pnlKamers.BringToFront();
-            pnlKamers.Dock = DockStyle.Fill;
-
-            pnlKamers.Show();
-
-
+           
             try
             {
                 // get and display all students
@@ -117,8 +74,6 @@ namespace SomerenUI
             {
                 MessageBox.Show("Something went wrong while loading the rooms: " + e.Message);
             }
-
-
 
         }
 
@@ -148,15 +103,6 @@ namespace SomerenUI
         {
             Methodes.ShowPanel(pnlDocenten);
         
-            // hide all other panels
-            HideAllPanels();
-            pnlDocenten.BringToFront();
-
-            pnlDocenten.Dock = DockStyle.Fill;
-
-            pnlDocenten.Show();
-
-
             try
             {
                 // get and display all students
@@ -171,12 +117,7 @@ namespace SomerenUI
 
         public void ShowOmzetPanel()
         {
-            HideAllPanels();
-            pnlDrankOmzet.BringToFront();
-
-            pnlDrankOmzet.Dock = DockStyle.Fill;
-
-            pnlDrankOmzet.Show();
+            Methodes.ShowPanel(pnlDrankOmzet);
         }
 
         private List<Docent> GetDocenten()
@@ -208,7 +149,7 @@ namespace SomerenUI
             DrankService drankService = new DrankService();
             List<Drank> drankjes = drankService.GetDrankjes();
             return drankjes;
-
+        }
         private List<OrderItem> GetOmzetItems()
         {
             OrderItemService orderItemService = new OrderItemService();
@@ -391,6 +332,7 @@ namespace SomerenUI
             listViewTotaalBesteld.Items.Clear();
             textBoxHoeveelheidDrank.Text = "";
             labelPrijs.Text = "$0,00";
+        }   
 
         private void DisplayOmzet()
         {
@@ -579,10 +521,7 @@ namespace SomerenUI
             else { MessageBox.Show("Selecteer alstublieft op wiens naam de bestelling is en voeg een drankje toe"); }
            
         }
-        }
-    }
- 
-
+        
         private void dtpDrankOmzetEind_ValueChanged(object sender, EventArgs e)
         {
             if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
@@ -624,9 +563,5 @@ namespace SomerenUI
             }
         }
 
-        private void listViewDrankOmzet_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

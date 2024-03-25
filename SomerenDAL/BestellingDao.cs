@@ -34,5 +34,31 @@ namespace SomerenDAL
             }
             return bestellingen;
         }
+
+        public List<Bestelling> ReadStudentsOrdered(DataTable dataTable)
+        {
+            List<Bestelling> studenten = new List<Bestelling>();
+
+            foreach (DataRow dr in dataTable.Rows)
+            {
+                Bestelling student = new Bestelling()
+                {
+                    StudentId = (int)dr["StudentId"]
+                };
+                studenten.Add(student);
+            }
+            return studenten;
+        }
+
+        public List<Bestelling> IndividualStudentsOrdered(DateTime start, DateTime end)
+        {
+            string query = "SELECT DISTINCT[StudentId] FROM [Bestelling] WHERE [BestelDatum] >= @start AND [BestelDatum] <= @end";
+            SqlParameter[] sqlParamaters = new SqlParameter[2];
+            sqlParamaters[0] = new SqlParameter("@start", SqlDbType.DateTime);
+            sqlParamaters[1] = new SqlParameter("@end", SqlDbType.DateTime);
+            sqlParamaters[0].Value = start;
+            sqlParamaters[1].Value = end.AddHours(23).AddMinutes(59).AddSeconds(59);
+            return ReadStudentsOrdered(ExecuteSelectQuery(query, sqlParamaters));
+        }
     }
 }
