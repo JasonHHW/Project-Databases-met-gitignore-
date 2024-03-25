@@ -12,5 +12,10 @@ namespace SomerenModel
         public int BestellingId { get; set; }
         public string DrankNaam { get; set; }
         public int Aantal {  get; set; }
+
+        public override string ToString()
+        {
+            return ($"itemid:{ItemId}, bestellingsid:{BestellingId}, dranknaam: {DrankNaam}, aantal: {Aantal}");
+        }
     }
 }

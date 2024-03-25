@@ -36,16 +36,18 @@ namespace SomerenModel
 
         public string RoomCode
         {
-            get {
+            get { 
                 string roomcode = "";
-                char[] kamercode = KamerCode.ToCharArray();
+                char[] kamercode = (KamerCode.ToCharArray());
                 for (int i = 1; i < kamercode.Length; i++)
                 {
                     roomcode += kamercode[i];
                 }
                 return roomcode;
             }
-            
         }
-    }
+            
+              
+        }
+    
 }

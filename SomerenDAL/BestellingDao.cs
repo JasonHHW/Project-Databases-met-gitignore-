@@ -18,6 +18,7 @@ namespace SomerenDAL
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
 
+
         public List<Bestelling> ReadTables(DataTable dataTable)
         {
             List<Bestelling> bestellingen = new List<Bestelling>();
@@ -27,7 +28,6 @@ namespace SomerenDAL
                 Bestelling bestelling = new Bestelling()
                 {
                     BestellingId = (int)dr["BestellingId"],
-                    OrderItemId = (int)dr["OrderItemId"],
                     StudentId = (int)dr["StudentId"],
                     BestelDatum = (DateTime)dr["BestelDatum"]
                 };
