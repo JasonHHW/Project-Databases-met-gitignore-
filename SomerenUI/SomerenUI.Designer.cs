@@ -71,6 +71,14 @@
             pictureBox8 = new System.Windows.Forms.PictureBox();
             lblDrankVAT = new System.Windows.Forms.Label();
             pnlDrankOmzet = new System.Windows.Forms.Panel();
+            listViewDrankOmzet = new System.Windows.Forms.ListView();
+            Sales = new System.Windows.Forms.ColumnHeader();
+            Turnover = new System.Windows.Forms.ColumnHeader();
+            numberofsales = new System.Windows.Forms.ColumnHeader();
+            lblDrankOmzetEind = new System.Windows.Forms.Label();
+            lblDrankOmzetStart = new System.Windows.Forms.Label();
+            dtpDrankOmzetEind = new System.Windows.Forms.DateTimePicker();
+            dtpDrankOmzetStart = new System.Windows.Forms.DateTimePicker();
             pictureBox7 = new System.Windows.Forms.PictureBox();
             lblDrankOmzet = new System.Windows.Forms.Label();
             pnlDrankVoorrraad = new System.Windows.Forms.Panel();
@@ -94,15 +102,16 @@
             kamertype = new System.Windows.Forms.ColumnHeader();
             pictureBox2 = new System.Windows.Forms.PictureBox();
             KamersLabel = new System.Windows.Forms.Label();
+            pnlDrankBestellingen = new System.Windows.Forms.Panel();
+            pictureBox6 = new System.Windows.Forms.PictureBox();
+            lblDrankBestellingen = new System.Windows.Forms.Label();
             lblDashboard = new System.Windows.Forms.Label();
             pnlStudents = new System.Windows.Forms.Panel();
             pictureBox1 = new System.Windows.Forms.PictureBox();
-            listViewStudenten = new System.Windows.Forms.ListView();
+            listViewStudents = new System.Windows.Forms.ListView();
             StudentsLabel = new System.Windows.Forms.Label();
             menuStrip1.SuspendLayout();
             pnlDashboard.SuspendLayout();
-            pnlDrankBestellingen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
             pnlDrankVAT.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox8).BeginInit();
             pnlDrankOmzet.SuspendLayout();
@@ -115,6 +124,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             pnlKamers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            pnlDrankBestellingen.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).BeginInit();
             pnlStudents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -134,8 +145,9 @@
             // 
             dashboardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { dashboardToolStripMenuItem1, exitToolStripMenuItem });
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            dashboardToolStripMenuItem.Size = new System.Drawing.Size(118, 29);
+            dashboardToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             dashboardToolStripMenuItem.Text = "Application";
+            dashboardToolStripMenuItem.Click += dashboardToolStripMenuItem_Click;
             // 
             // dashboardToolStripMenuItem1
             // 
@@ -185,6 +197,7 @@
             drankToolStripMenuItem.Name = "drankToolStripMenuItem";
             drankToolStripMenuItem.Size = new System.Drawing.Size(75, 29);
             drankToolStripMenuItem.Text = "Drank";
+            drankToolStripMenuItem.Click += drankToolStripMenuItem_Click;
             // 
             // drankVoorraadToolStripMenuItem
             // 
@@ -204,6 +217,7 @@
             omzetToolStripMenuItem.Name = "omzetToolStripMenuItem";
             omzetToolStripMenuItem.Size = new System.Drawing.Size(208, 34);
             omzetToolStripMenuItem.Text = "Omzet";
+            omzetToolStripMenuItem.Click += omzetToolStripMenuItem_Click;
             // 
             // vatToolStripMenuItem
             // 
@@ -458,14 +472,79 @@
             // 
             // pnlDrankOmzet
             // 
+            pnlDrankOmzet.Controls.Add(listViewDrankOmzet);
+            pnlDrankOmzet.Controls.Add(lblDrankOmzetEind);
+            pnlDrankOmzet.Controls.Add(lblDrankOmzetStart);
+            pnlDrankOmzet.Controls.Add(dtpDrankOmzetEind);
+            pnlDrankOmzet.Controls.Add(dtpDrankOmzetStart);
             pnlDrankOmzet.Controls.Add(pictureBox7);
             pnlDrankOmzet.Controls.Add(lblDrankOmzet);
-            pnlDrankOmzet.Location = new System.Drawing.Point(662, 265);
-            pnlDrankOmzet.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            pnlDrankOmzet.Location = new System.Drawing.Point(13, 31);
             pnlDrankOmzet.Name = "pnlDrankOmzet";
-            pnlDrankOmzet.Size = new System.Drawing.Size(199, 155);
+            pnlDrankOmzet.Size = new System.Drawing.Size(922, 435);
             pnlDrankOmzet.TabIndex = 7;
             pnlDrankOmzet.Visible = false;
+            pnlDrankOmzet.Paint += pnlDrankOmzet_Paint;
+            // 
+            // listViewDrankOmzet
+            // 
+            listViewDrankOmzet.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { Sales, Turnover, numberofsales });
+            listViewDrankOmzet.Location = new System.Drawing.Point(21, 167);
+            listViewDrankOmzet.Name = "listViewDrankOmzet";
+            listViewDrankOmzet.Size = new System.Drawing.Size(568, 97);
+            listViewDrankOmzet.TabIndex = 7;
+            listViewDrankOmzet.UseCompatibleStateImageBehavior = false;
+            listViewDrankOmzet.View = System.Windows.Forms.View.Details;
+            listViewDrankOmzet.SelectedIndexChanged += listViewDrankOmzet_SelectedIndexChanged;
+            // 
+            // Sales
+            // 
+            Sales.Text = "Sales";
+            // 
+            // Turnover
+            // 
+            Turnover.Text = "Turnover";
+            // 
+            // numberofsales
+            // 
+            numberofsales.Text = "Number of sales";
+            // 
+            // lblDrankOmzetEind
+            // 
+            lblDrankOmzetEind.AutoSize = true;
+            lblDrankOmzetEind.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblDrankOmzetEind.Location = new System.Drawing.Point(389, 69);
+            lblDrankOmzetEind.Name = "lblDrankOmzetEind";
+            lblDrankOmzetEind.Size = new System.Drawing.Size(112, 25);
+            lblDrankOmzetEind.TabIndex = 6;
+            lblDrankOmzetEind.Text = "Eind datum:";
+            lblDrankOmzetEind.Click += lblDrankOmzetEind_Click;
+            // 
+            // lblDrankOmzetStart
+            // 
+            lblDrankOmzetStart.AutoSize = true;
+            lblDrankOmzetStart.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblDrankOmzetStart.Location = new System.Drawing.Point(21, 69);
+            lblDrankOmzetStart.Name = "lblDrankOmzetStart";
+            lblDrankOmzetStart.Size = new System.Drawing.Size(113, 25);
+            lblDrankOmzetStart.TabIndex = 5;
+            lblDrankOmzetStart.Text = "Start datum:";
+            // 
+            // dtpDrankOmzetEind
+            // 
+            dtpDrankOmzetEind.Location = new System.Drawing.Point(389, 110);
+            dtpDrankOmzetEind.Name = "dtpDrankOmzetEind";
+            dtpDrankOmzetEind.Size = new System.Drawing.Size(200, 23);
+            dtpDrankOmzetEind.TabIndex = 4;
+            dtpDrankOmzetEind.ValueChanged += dtpDrankOmzetEind_ValueChanged;
+            // 
+            // dtpDrankOmzetStart
+            // 
+            dtpDrankOmzetStart.Location = new System.Drawing.Point(21, 110);
+            dtpDrankOmzetStart.Name = "dtpDrankOmzetStart";
+            dtpDrankOmzetStart.Size = new System.Drawing.Size(200, 23);
+            dtpDrankOmzetStart.TabIndex = 3;
+            dtpDrankOmzetStart.ValueChanged += dtpDrankOmzetStart_ValueChanged;
             // 
             // pictureBox7
             // 
@@ -641,6 +720,7 @@
             listViewKamers.TabIndex = 1;
             listViewKamers.UseCompatibleStateImageBehavior = false;
             listViewKamers.View = System.Windows.Forms.View.Details;
+            listViewKamers.SelectedIndexChanged += listViewKamers_SelectedIndexChanged;
             // 
             // kamernummer
             // 
@@ -764,6 +844,9 @@
             pnlKamers.ResumeLayout(false);
             pnlKamers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            pnlDrankBestellingen.ResumeLayout(false);
+            pnlDrankBestellingen.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();
             pnlStudents.ResumeLayout(false);
             pnlStudents.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -843,5 +926,13 @@
         private System.Windows.Forms.Label lblBesteller;
         private System.Windows.Forms.Button bttnPlaatsBestelling;
         private System.Windows.Forms.Button bttnResetBestelling;
+        private System.Windows.Forms.DateTimePicker dtpDrankOmzetEind;
+        private System.Windows.Forms.DateTimePicker dtpDrankOmzetStart;
+        private System.Windows.Forms.Label lblDrankOmzetEind;
+        private System.Windows.Forms.Label lblDrankOmzetStart;
+        private System.Windows.Forms.ListView listViewDrankOmzet;
+        private System.Windows.Forms.ColumnHeader Turnover;
+        public System.Windows.Forms.ColumnHeader Sales;
+        private System.Windows.Forms.ColumnHeader numberofsales;
     }
 }

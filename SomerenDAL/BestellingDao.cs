@@ -1,4 +1,4 @@
-﻿using SomerenModel;
+using SomerenModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,7 +17,6 @@ namespace SomerenDAL
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
-
 
         public List<Bestelling> ReadTables(DataTable dataTable)
         {

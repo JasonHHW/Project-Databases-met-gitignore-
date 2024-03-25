@@ -25,12 +25,40 @@ namespace SomerenUI
 
             Methodes.ShowPanel(pnlDashboard);
 
+        private void HideAllPanels() // Deze methode zet de visibility van alle pannels in de UI op false
+        {
+            pnlStudents.Hide();
+            pnlDocenten.Hide();
+            pnlActviteiten.Hide();
+            pnlKamers.Hide();
+            pnlDrankBestellingen.Hide();
+            pnlDrankOmzet.Hide();
+            pnlDrankVAT.Hide();
+            pnlDrankVoorrraad.Hide();
+        }
+        private void ShowDashboardPanel()
+        {
+            // hide all other panels
+            HideAllPanels();
+
+            // show dashboard
+            pnlDashboard.Show();
         }
 
         private void ShowStudentsPanel()
         {
 
             Methodes.ShowPanel(pnlStudents);
+            // hide all other panels
+            //pnlDashboard.Hide();
+
+            HideAllPanels();
+
+            // show students
+            pnlStudents.BringToFront();
+            pnlStudents.Dock = DockStyle.Fill;
+
+            pnlStudents.Show();
 
             try
             {
@@ -48,6 +76,15 @@ namespace SomerenUI
         private void ShowActiviteitenPanel()
         {
             Methodes.ShowPanel(pnlActviteiten);
+        
+            // hide all other panels
+            HideAllPanels();
+            pnlActviteiten.BringToFront();
+            pnlActviteiten.Dock = DockStyle.Fill;
+
+            pnlActviteiten.Show();
+
+
             try
             {
                 // get and display all students
@@ -63,6 +100,12 @@ namespace SomerenUI
         private void ShowKamersPanel()
         {
             Methodes.ShowPanel(pnlKamers);
+            HideAllPanels();
+            pnlKamers.BringToFront();
+            pnlKamers.Dock = DockStyle.Fill;
+
+            pnlKamers.Show();
+
 
             try
             {
@@ -104,6 +147,16 @@ namespace SomerenUI
         private void ShowTeachersPanel()
         {
             Methodes.ShowPanel(pnlDocenten);
+        
+            // hide all other panels
+            HideAllPanels();
+            pnlDocenten.BringToFront();
+
+            pnlDocenten.Dock = DockStyle.Fill;
+
+            pnlDocenten.Show();
+
+
             try
             {
                 // get and display all students
@@ -116,6 +169,15 @@ namespace SomerenUI
             }
         }
 
+        public void ShowOmzetPanel()
+        {
+            HideAllPanels();
+            pnlDrankOmzet.BringToFront();
+
+            pnlDrankOmzet.Dock = DockStyle.Fill;
+
+            pnlDrankOmzet.Show();
+        }
 
         private List<Docent> GetDocenten()
         {
@@ -146,6 +208,19 @@ namespace SomerenUI
             DrankService drankService = new DrankService();
             List<Drank> drankjes = drankService.GetDrankjes();
             return drankjes;
+
+        private List<OrderItem> GetOmzetItems()
+        {
+            OrderItemService orderItemService = new OrderItemService();
+            List<OrderItem> orderItems = orderItemService.GetOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
+
+            return orderItems;
+        }
+
+        public int GetAmountOfStudentsWithOrders()
+        {
+            BestellingService bestellingService = new BestellingService();
+            return bestellingService.GetAmountOfStudentsOmzet(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value).Count;
         }
 
 
@@ -317,6 +392,24 @@ namespace SomerenUI
             textBoxHoeveelheidDrank.Text = "";
             labelPrijs.Text = "$0,00";
 
+        private void DisplayOmzet()
+        {
+            listViewDrankOmzet.Items.Clear();
+
+            List<OrderItem> orderItems = GetOmzetItems();
+            int studentsOrdered = GetAmountOfStudentsWithOrders();
+            double price = 2.00;
+            int totalDrinksSold = 0;
+            double turnover = 0.00;
+            foreach (OrderItem orderItem in orderItems)
+            {
+                totalDrinksSold += orderItem.Aantal;
+                turnover += orderItem.Aantal * price;
+            }
+            ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
+            li.SubItems.Add("� " + String.Format("{0,00}", turnover));
+            li.SubItems.Add(Convert.ToString(studentsOrdered));
+            listViewDrankOmzet.Items.Add(li);
         }
 
         private void dashboardToolStripMenuItem1_Click(object sender, System.EventArgs e)
@@ -336,12 +429,15 @@ namespace SomerenUI
         }
 
 
+        private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void lecturersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowTeachersPanel();
         }
-
 
 
         private void roomsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -350,13 +446,10 @@ namespace SomerenUI
         }
 
 
-
         private void activitiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowActiviteitenPanel();
         }
-
-
 
 
 
@@ -489,3 +582,51 @@ namespace SomerenUI
         }
     }
  
+
+        private void dtpDrankOmzetEind_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
+            {
+                MessageBox.Show("End date can not be set before the start date");
+                dtpDrankOmzetEind.Value = dtpDrankOmzetStart.Value;
+            }
+            else if (dtpDrankOmzetEind.Value > DateTime.Now)
+            {
+                MessageBox.Show("End date can not be set after the current date");
+                dtpDrankOmzetEind.Value = DateTime.Now;
+            }
+            else
+            {
+                DisplayOmzet();
+            }
+
+        }
+
+        private void omzetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowOmzetPanel();
+        }
+
+        private void dtpDrankOmzetStart_ValueChanged(object sender, EventArgs e)
+        {
+            if (dtpDrankOmzetStart.Value > DateTime.Now)
+            {
+                MessageBox.Show("Start date can not be set after the current date");
+                dtpDrankOmzetStart.Value = DateTime.Now;
+            } else if (dtpDrankOmzetStart.Value > dtpDrankOmzetEind.Value)
+            {
+                MessageBox.Show("Start date can not be set after the end date");
+                dtpDrankOmzetStart.Value = dtpDrankOmzetEind.Value;
+            }
+            else
+            {
+                DisplayOmzet();
+            }
+        }
+
+        private void listViewDrankOmzet_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
