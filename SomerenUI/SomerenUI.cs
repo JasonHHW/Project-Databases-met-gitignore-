@@ -14,7 +14,7 @@ namespace SomerenUI
 {
     public partial class SomerenUI : Form
     {
-        Kamer kamer { get; set; }
+
         public SomerenUI()
         {
             InitializeComponent();
@@ -25,7 +25,6 @@ namespace SomerenUI
 
             Methodes.ShowPanel(pnlDashboard);
         }
-
         private void ShowStudentsPanel()
         {
 
@@ -349,9 +348,10 @@ namespace SomerenUI
                 turnover += orderItem.Aantal * price;
             }
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
-            li.SubItems.Add("� " + String.Format("{0,00}", turnover));
+            li.SubItems.Add("$ " + String.Format("{0,00}", turnover));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
             listViewDrankOmzet.Items.Add(li);
+            listViewDrankOmzet.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void dashboardToolStripMenuItem1_Click(object sender, System.EventArgs e)
@@ -404,11 +404,6 @@ namespace SomerenUI
 
 
 
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DisplayTotaalBesteld();
-        }
 
         private void listViewBestellingenStudenten_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -507,7 +502,10 @@ namespace SomerenUI
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
-                        ShowDrankBestellingenPanel();
+                      
+                        List<Drank> drankjes = GetDrankjes();
+                        DisplayDrankjes(drankjes);
+
 
                     }
                     else
@@ -565,9 +563,24 @@ namespace SomerenUI
             }
         }
 
-        private void activitiesToolStripMenuItem_Click_1(object sender, EventArgs e)
+
+
+        private void drankToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void drankVoorraadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+        private void bttnOrder_Click(object sender, EventArgs e)
+        {
+            DisplayTotaalBesteld();
         }
     }
 }
