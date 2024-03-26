@@ -106,6 +106,17 @@
             pictureBox2 = new System.Windows.Forms.PictureBox();
             KamersLabel = new System.Windows.Forms.Label();
             lblDashboard = new System.Windows.Forms.Label();
+            pnlManageStudents = new System.Windows.Forms.Panel();
+            pictureBox9 = new System.Windows.Forms.PictureBox();
+            lblManageStudents = new System.Windows.Forms.Label();
+            pnlManageActivitySupervisors = new System.Windows.Forms.Panel();
+            pictureBox10 = new System.Windows.Forms.PictureBox();
+            lblManageActivitySupervisors = new System.Windows.Forms.Label();
+            pnlManageActivityParticipants = new System.Windows.Forms.Panel();
+            pictureBox11 = new System.Windows.Forms.PictureBox();
+            lblManageActivityParticipants = new System.Windows.Forms.Label();
+            begeleidersBeherenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            deelnemersBeherenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             pnlDashboard.SuspendLayout();
             pnlDrankOmzet.SuspendLayout();
@@ -123,6 +134,12 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             pnlKamers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            pnlManageStudents.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
+            pnlManageActivitySupervisors.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).BeginInit();
+            pnlManageActivityParticipants.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -145,14 +162,14 @@
             // dashboardToolStripMenuItem1
             // 
             dashboardToolStripMenuItem1.Name = "dashboardToolStripMenuItem1";
-            dashboardToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            dashboardToolStripMenuItem1.Size = new System.Drawing.Size(131, 22);
             dashboardToolStripMenuItem1.Text = "Dashboard";
             dashboardToolStripMenuItem1.Click += dashboardToolStripMenuItem_Click;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            exitToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -172,6 +189,7 @@
             // 
             // activitiesToolStripMenuItem
             // 
+            activitiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { begeleidersBeherenToolStripMenuItem, deelnemersBeherenToolStripMenuItem });
             activitiesToolStripMenuItem.Name = "activitiesToolStripMenuItem";
             activitiesToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
             activitiesToolStripMenuItem.Text = "Activiteiten";
@@ -194,32 +212,35 @@
             // drankVoorraadToolStripMenuItem
             // 
             drankVoorraadToolStripMenuItem.Name = "drankVoorraadToolStripMenuItem";
-            drankVoorraadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            drankVoorraadToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             drankVoorraadToolStripMenuItem.Text = "Voorraad";
             drankVoorraadToolStripMenuItem.Click += drankVoorraadToolStripMenuItem_Click;
             // 
             // drankBestellingenToolStripMenuItem
             // 
             drankBestellingenToolStripMenuItem.Name = "drankBestellingenToolStripMenuItem";
-            drankBestellingenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            drankBestellingenToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             drankBestellingenToolStripMenuItem.Text = "Bestellingen";
             drankBestellingenToolStripMenuItem.Click += drankBestellingenToolStripMenuItem_Click;
             // 
             // omzetToolStripMenuItem
             // 
             omzetToolStripMenuItem.Name = "omzetToolStripMenuItem";
-            omzetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            omzetToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             omzetToolStripMenuItem.Text = "Omzet";
             omzetToolStripMenuItem.Click += omzetToolStripMenuItem_Click;
             // 
             // vatToolStripMenuItem
             // 
             vatToolStripMenuItem.Name = "vatToolStripMenuItem";
-            vatToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            vatToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             vatToolStripMenuItem.Text = "VAT";
             // 
             // pnlDashboard
             // 
+            pnlDashboard.Controls.Add(pnlManageActivityParticipants);
+            pnlDashboard.Controls.Add(pnlManageActivitySupervisors);
+            pnlDashboard.Controls.Add(pnlManageStudents);
             pnlDashboard.Controls.Add(pnlDrankOmzet);
             pnlDashboard.Controls.Add(pnlStudents);
             pnlDashboard.Controls.Add(pnlDrankBestellingen);
@@ -243,10 +264,10 @@
             pnlDrankOmzet.Controls.Add(dtpDrankOmzetStart);
             pnlDrankOmzet.Controls.Add(pictureBox7);
             pnlDrankOmzet.Controls.Add(lblDrankOmzet);
-            pnlDrankOmzet.Location = new System.Drawing.Point(244, 121);
+            pnlDrankOmzet.Location = new System.Drawing.Point(244, 159);
             pnlDrankOmzet.Margin = new System.Windows.Forms.Padding(2);
             pnlDrankOmzet.Name = "pnlDrankOmzet";
-            pnlDrankOmzet.Size = new System.Drawing.Size(543, 289);
+            pnlDrankOmzet.Size = new System.Drawing.Size(100, 48);
             pnlDrankOmzet.TabIndex = 7;
             pnlDrankOmzet.Visible = false;
             // 
@@ -377,9 +398,9 @@
             pnlDrankBestellingen.Controls.Add(listViewBestellingenStudenten);
             pnlDrankBestellingen.Controls.Add(pictureBox6);
             pnlDrankBestellingen.Controls.Add(lblDrankBestellingen);
-            pnlDrankBestellingen.Location = new System.Drawing.Point(77, 31);
+            pnlDrankBestellingen.Location = new System.Drawing.Point(377, 159);
             pnlDrankBestellingen.Name = "pnlDrankBestellingen";
-            pnlDrankBestellingen.Size = new System.Drawing.Size(828, 432);
+            pnlDrankBestellingen.Size = new System.Drawing.Size(105, 81);
             pnlDrankBestellingen.TabIndex = 6;
             pnlDrankBestellingen.Visible = false;
             // 
@@ -571,9 +592,9 @@
             // 
             pnlDrankVAT.Controls.Add(pictureBox8);
             pnlDrankVAT.Controls.Add(lblDrankVAT);
-            pnlDrankVAT.Location = new System.Drawing.Point(650, 159);
+            pnlDrankVAT.Location = new System.Drawing.Point(528, 161);
             pnlDrankVAT.Name = "pnlDrankVAT";
-            pnlDrankVAT.Size = new System.Drawing.Size(139, 93);
+            pnlDrankVAT.Size = new System.Drawing.Size(77, 64);
             pnlDrankVAT.TabIndex = 8;
             pnlDrankVAT.Visible = false;
             // 
@@ -777,6 +798,105 @@
             lblDashboard.TabIndex = 0;
             lblDashboard.Text = "Welcome to the Someren Application!";
             // 
+            // pnlManageStudents
+            // 
+            pnlManageStudents.Controls.Add(pictureBox9);
+            pnlManageStudents.Controls.Add(lblManageStudents);
+            pnlManageStudents.Location = new System.Drawing.Point(35, 286);
+            pnlManageStudents.Name = "pnlManageStudents";
+            pnlManageStudents.Size = new System.Drawing.Size(115, 64);
+            pnlManageStudents.TabIndex = 9;
+            pnlManageStudents.Visible = false;
+            // 
+            // pictureBox9
+            // 
+            pictureBox9.Image = (System.Drawing.Image)resources.GetObject("pictureBox9.Image");
+            pictureBox9.Location = new System.Drawing.Point(805, 0);
+            pictureBox9.Name = "pictureBox9";
+            pictureBox9.Size = new System.Drawing.Size(130, 123);
+            pictureBox9.TabIndex = 2;
+            pictureBox9.TabStop = false;
+            // 
+            // lblManageStudents
+            // 
+            lblManageStudents.AutoSize = true;
+            lblManageStudents.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblManageStudents.Location = new System.Drawing.Point(13, 7);
+            lblManageStudents.Name = "lblManageStudents";
+            lblManageStudents.Size = new System.Drawing.Size(201, 32);
+            lblManageStudents.TabIndex = 0;
+            lblManageStudents.Text = "Manage Students";
+            // 
+            // pnlManageActivitySupervisors
+            // 
+            pnlManageActivitySupervisors.Controls.Add(pictureBox10);
+            pnlManageActivitySupervisors.Controls.Add(lblManageActivitySupervisors);
+            pnlManageActivitySupervisors.Location = new System.Drawing.Point(198, 286);
+            pnlManageActivitySupervisors.Name = "pnlManageActivitySupervisors";
+            pnlManageActivitySupervisors.Size = new System.Drawing.Size(115, 64);
+            pnlManageActivitySupervisors.TabIndex = 10;
+            pnlManageActivitySupervisors.Visible = false;
+            // 
+            // pictureBox10
+            // 
+            pictureBox10.Image = (System.Drawing.Image)resources.GetObject("pictureBox10.Image");
+            pictureBox10.Location = new System.Drawing.Point(805, 0);
+            pictureBox10.Name = "pictureBox10";
+            pictureBox10.Size = new System.Drawing.Size(130, 123);
+            pictureBox10.TabIndex = 2;
+            pictureBox10.TabStop = false;
+            // 
+            // lblManageActivitySupervisors
+            // 
+            lblManageActivitySupervisors.AutoSize = true;
+            lblManageActivitySupervisors.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblManageActivitySupervisors.Location = new System.Drawing.Point(13, 7);
+            lblManageActivitySupervisors.Name = "lblManageActivitySupervisors";
+            lblManageActivitySupervisors.Size = new System.Drawing.Size(315, 32);
+            lblManageActivitySupervisors.TabIndex = 0;
+            lblManageActivitySupervisors.Text = "Manage Activity Supervisors";
+            // 
+            // pnlManageActivityParticipants
+            // 
+            pnlManageActivityParticipants.Controls.Add(pictureBox11);
+            pnlManageActivityParticipants.Controls.Add(lblManageActivityParticipants);
+            pnlManageActivityParticipants.Location = new System.Drawing.Point(356, 286);
+            pnlManageActivityParticipants.Name = "pnlManageActivityParticipants";
+            pnlManageActivityParticipants.Size = new System.Drawing.Size(115, 64);
+            pnlManageActivityParticipants.TabIndex = 11;
+            pnlManageActivityParticipants.Visible = false;
+            // 
+            // pictureBox11
+            // 
+            pictureBox11.Image = (System.Drawing.Image)resources.GetObject("pictureBox11.Image");
+            pictureBox11.Location = new System.Drawing.Point(805, 0);
+            pictureBox11.Name = "pictureBox11";
+            pictureBox11.Size = new System.Drawing.Size(130, 123);
+            pictureBox11.TabIndex = 2;
+            pictureBox11.TabStop = false;
+            // 
+            // lblManageActivityParticipants
+            // 
+            lblManageActivityParticipants.AutoSize = true;
+            lblManageActivityParticipants.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblManageActivityParticipants.Location = new System.Drawing.Point(13, 7);
+            lblManageActivityParticipants.Name = "lblManageActivityParticipants";
+            lblManageActivityParticipants.Size = new System.Drawing.Size(314, 32);
+            lblManageActivityParticipants.TabIndex = 0;
+            lblManageActivityParticipants.Text = "Manage Activity Participants";
+            // 
+            // begeleidersBeherenToolStripMenuItem
+            // 
+            begeleidersBeherenToolStripMenuItem.Name = "begeleidersBeherenToolStripMenuItem";
+            begeleidersBeherenToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            begeleidersBeherenToolStripMenuItem.Text = "Begeleiders beheren";
+            // 
+            // deelnemersBeherenToolStripMenuItem
+            // 
+            deelnemersBeherenToolStripMenuItem.Name = "deelnemersBeherenToolStripMenuItem";
+            deelnemersBeherenToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            deelnemersBeherenToolStripMenuItem.Text = "Deelnemers beheren";
+            // 
             // SomerenUI
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -814,6 +934,15 @@
             pnlKamers.ResumeLayout(false);
             pnlKamers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            pnlManageStudents.ResumeLayout(false);
+            pnlManageStudents.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
+            pnlManageActivitySupervisors.ResumeLayout(false);
+            pnlManageActivitySupervisors.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox10).EndInit();
+            pnlManageActivityParticipants.ResumeLayout(false);
+            pnlManageActivityParticipants.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -898,5 +1027,16 @@
         public System.Windows.Forms.ColumnHeader Sales;
         private System.Windows.Forms.ColumnHeader numberofsales;
         private System.Windows.Forms.ListView listViewStudenten;
+        private System.Windows.Forms.Panel pnlManageActivityParticipants;
+        private System.Windows.Forms.PictureBox pictureBox11;
+        private System.Windows.Forms.Label lblManageActivityParticipants;
+        private System.Windows.Forms.Panel pnlManageActivitySupervisors;
+        private System.Windows.Forms.PictureBox pictureBox10;
+        private System.Windows.Forms.Label lblManageActivitySupervisors;
+        private System.Windows.Forms.Panel pnlManageStudents;
+        private System.Windows.Forms.PictureBox pictureBox9;
+        private System.Windows.Forms.Label lblManageStudents;
+        private System.Windows.Forms.ToolStripMenuItem begeleidersBeherenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deelnemersBeherenToolStripMenuItem;
     }
 }
