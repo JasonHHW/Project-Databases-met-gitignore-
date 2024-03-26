@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
+
 namespace SomerenUI
 {
     public partial class SomerenUI : Form
@@ -328,7 +330,7 @@ namespace SomerenUI
         {
             listViewTotaalBesteld.Items.Clear();
             textBoxHoeveelheidDrank.Text = "";
-            labelPrijs.Text = "$0,00";
+            labelPrijs.Text = 0.00.ToString("C", new CultureInfo("nl-NL"));
         }
 
         private void DisplayOmzet()
@@ -339,7 +341,7 @@ namespace SomerenUI
             int totalDrinksSold = GetOmzetTotalDrankjes();
             double turnover = totalDrinksSold * price;
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
-            li.SubItems.Add("$ " + String.Format("{0,00}", turnover));
+            li.SubItems.Add(turnover.ToString("C", new CultureInfo("nl-NL")));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
             listViewDrankOmzet.Items.Add(li);
             listViewDrankOmzet.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
