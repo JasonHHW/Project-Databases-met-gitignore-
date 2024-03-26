@@ -77,16 +77,12 @@ namespace SomerenDAL
             int totalDrinks = 0;
             foreach (DataRow dr in dataTable.Rows)
             {
-                totalDrinks += (int)dr["Aantal"];
+                if (dr["Aantal"] != DBNull.Value)
+                {
+                    totalDrinks += Convert.ToInt32(dr["Aantal"]);
+                }
             }
-            if (totalDrinks > 0)
-            {
-                return totalDrinks;
-            }
-            else
-            {
-                throw new Exception();
-            }
+            return totalDrinks;
         }
         public int ReadTablesforint(DataTable dataTable)
         {
@@ -104,8 +100,8 @@ namespace SomerenDAL
             SqlParameter[] sqlParameters = new SqlParameter[2];
             sqlParameters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParameters[1] = new SqlParameter("@eind", SqlDbType.DateTime);
-            sqlParameters[0].Value = start;
-            sqlParameters[1].Value = end.AddHours(23).AddMinutes(59).AddSeconds(59);
+            sqlParameters[0].Value = start.Date;
+            sqlParameters[1].Value = end.Date.AddDays(1);
             return ReadTotalDrinks(ExecuteSelectQuery(query, sqlParameters));
         }
 

@@ -52,12 +52,12 @@ namespace SomerenDAL
 
         public List<Bestelling> IndividualStudentsOrdered(DateTime start, DateTime end)
         {
-            string query = "SELECT DISTINCT[StudentId] FROM [Bestelling] WHERE [BestelDatum] >= @start AND [BestelDatum] <= @end";
+            string query = "SELECT DISTINCT[StudentId] FROM [Bestelling] WHERE [BestelDatum] BETWEEN @start AND @end";
             SqlParameter[] sqlParamaters = new SqlParameter[2];
             sqlParamaters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParamaters[1] = new SqlParameter("@end", SqlDbType.DateTime);
-            sqlParamaters[0].Value = start;
-            sqlParamaters[1].Value = end.AddHours(23).AddMinutes(59).AddSeconds(59);
+            sqlParamaters[0].Value = start.Date;
+            sqlParamaters[1].Value = end.Date.AddDays(1);
             return ReadStudentsOrdered(ExecuteSelectQuery(query, sqlParamaters));
         }
     }
