@@ -556,11 +556,6 @@ namespace SomerenUI
             }
         }
 
-        private void listViewBestellingenDrankjes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void drankVoorraadToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -573,5 +568,6 @@ namespace SomerenUI
         {
             DisplayTotaalBesteld();
         }
+
     }
 }
