@@ -273,17 +273,17 @@ namespace SomerenUI
             // clear the listview before filling it
             listViewStudenten.Items.Clear();
 
-
             foreach (Student student in students)
             {
-                ListViewItem li = new ListViewItem(student.Naam);
+                ListViewItem li = new ListViewItem(student.StudentId.ToString());
 
+                li.SubItems.Add(student.Naam);
+                li.SubItems.Add(student.Telefoonnummer);
+                li.SubItems.Add(student.Klas);
+                li.SubItems.Add(student.Kamer);
 
-                li.Tag = student;   // link student object to listview item
                 listViewStudenten.Items.Add(li);
-
             }
-            //   listViewStudents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
         private void DisplayTeachers(List<Docent> docenten)
         {
