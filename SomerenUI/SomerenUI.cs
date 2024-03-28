@@ -11,6 +11,9 @@ using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using System.Linq;
+using SomerenDAL;
 
 namespace SomerenUI
 {
@@ -115,6 +118,53 @@ namespace SomerenUI
                 MessageBox.Show("Something went wrong while loading the teachers: " + e.Message);
             }
         }
+
+        private void ShowDrankVoorraadPanel()
+        {
+            Methodes.ShowPanel(pnlDrankVoorraad);
+
+            try
+            {
+                // get and display all students
+                List<Drank> drankjes = GetDrankjes();
+                DisplayDrankVoorraad(drankjes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Something went wrong while loading the stock: " + e.Message);
+            }
+        }
+
+        private void DisplayDrankVoorraad(List<Drank> voorraad)
+        {
+            try
+            {
+                var orderedDrankList = voorraad.OrderBy(d => d.Voorraad).ToList();
+
+                // Clear existing items
+                listViewVoorraad.Items.Clear();
+
+                // Populate the ListView with drink stock information
+                foreach (Drank item in orderedDrankList)
+                {
+                    ListViewItem listViewItem = new ListViewItem(item.DrankNaam);
+                    listViewItem.SubItems.Add(item.IsAlcoholisch ? "Yes" : "No");
+                    listViewItem.SubItems.Add(item.Voorraad.ToString());
+                    listViewItem.SubItems.Add(item.Aantal_Geconsumeerd.ToString());
+                    listViewItem.SubItems.Add(item.Prijs.ToString("�0.00"));
+
+                    // Add stock status index as a subitem
+                    listViewItem.SubItems.Add((item.Voorraad < 10) ? "Insufficient" : "Sufficient");
+
+                    listViewVoorraad.Items.Add(listViewItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading drink stock information: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
 
         public void ShowOmzetPanel()
         {
@@ -223,17 +273,17 @@ namespace SomerenUI
             // clear the listview before filling it
             listViewStudenten.Items.Clear();
 
-
             foreach (Student student in students)
             {
-                ListViewItem li = new ListViewItem(student.Naam);
+                ListViewItem li = new ListViewItem(student.StudentId.ToString());
 
+                li.SubItems.Add(student.Naam);
+                li.SubItems.Add(student.Telefoonnummer);
+                li.SubItems.Add(student.Klas);
+                li.SubItems.Add(student.Kamer);
 
-                li.Tag = student;   // link student object to listview item
                 listViewStudenten.Items.Add(li);
-
             }
-            //   listViewStudents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
         private void DisplayTeachers(List<Docent> docenten)
         {
@@ -563,7 +613,7 @@ namespace SomerenUI
 
         private void drankVoorraadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            ShowDrankVoorraadPanel();
         }
 
 
@@ -572,6 +622,188 @@ namespace SomerenUI
         private void bttnOrder_Click(object sender, EventArgs e)
         {
             DisplayTotaalBesteld();
+        }
+
+        private void drankToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddDrankButton_Click(object sender, EventArgs e)
+        {
+            string drinkName = DrankNaamInput.Text;
+            bool isAlcoholisch = AlcoholischCheckBox.Checked;
+            int voorraadAantal = Convert.ToInt32(VoorraadInput.Text);
+            decimal prijs = Convert.ToDecimal(PrijsInput.Text);
+
+            // Show confirmation message
+            DialogResult result = MessageBox.Show($"Are you sure you want to add {voorraadAantal} {drinkName} with Price �{prijs:F2}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                // Instantiate DrankDao
+                DrankDao drankDao = new DrankDao();
+
+                try
+                {
+                    // Add the drink to the database
+                    drankDao.AddDrink(drinkName, isAlcoholisch, voorraadAantal, prijs);
+
+                    // Display success message
+                    MessageBox.Show("Drink added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Clear input fields
+                    ClearInputFields();
+                }
+                catch (Exception ex)
+                {
+                    // Display error message
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                // Optionally, perform any additional actions
+                ShowDrankVoorraadPanel();
+            }
+        }
+
+        private void listViewVoorraad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedItem = listViewVoorraad.SelectedItems[0];
+
+                // Extract data from the selected ListViewItem
+                string drankNaam = selectedItem.Text;
+                string isAlcoholischText = selectedItem.SubItems[1].Text;
+
+                // Convert text representation of "Alcoholisch" to boolean
+                bool isAlcoholisch = isAlcoholischText.Equals("Yes", StringComparison.OrdinalIgnoreCase);
+
+                // Update controls with selected data
+                DrankNaamInput.Text = drankNaam;
+                AlcoholischCheckBox.Checked = isAlcoholisch;
+
+                // Parse VoorraadAantal (stock quantity)
+                int voorraadAantal;
+                if (!int.TryParse(selectedItem.SubItems[2].Text, out voorraadAantal))
+                {
+                    // Handle parsing error gracefully
+                    MessageBox.Show("Invalid stock quantity.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Parse Prijs (price)
+                decimal prijs;
+                if (!decimal.TryParse(selectedItem.SubItems[4].Text.Replace("� ", ""),
+                    NumberStyles.Currency, CultureInfo.CurrentCulture, out prijs))
+                {
+                    // Handle parsing error gracefully
+                    MessageBox.Show("Invalid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Update controls with selected data
+                DrankNaamInput.Text = drankNaam;
+                AlcoholischCheckBox.Checked = isAlcoholisch;
+                VoorraadInput.Text = voorraadAantal.ToString();
+                PrijsInput.Text = prijs.ToString();
+            }
+        }
+
+
+        private void EditDrankButton_Click(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedItem = listViewVoorraad.SelectedItems[0];
+
+                // Get the old data from the selected item
+                string oldDrankNaam = selectedItem.Text;
+                string oldVoorraadAantal = selectedItem.SubItems[2].Text;
+                string oldPrijs = selectedItem.SubItems[4].Text.Replace("� ", ""); // Remove currency symbol before parsing
+
+                // Get new data from textboxes
+                string newDrankNaam = DrankNaamInput.Text;
+                bool isAlcoholisch = AlcoholischCheckBox.Checked;
+                int newVoorraadAantal = int.Parse(VoorraadInput.Text);
+                decimal newPrijs = decimal.Parse(PrijsInput.Text);
+
+                // Confirmation message
+                DialogResult result = MessageBox.Show($"Are you sure you want to edit:\n{oldVoorraadAantal} {oldDrankNaam} with price �{oldPrijs:F2}\nto:\n{newVoorraadAantal} {newDrankNaam} with price �{newPrijs:F2}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Call the DAO method to update the drink
+                    DrankDao drankDao = new DrankDao();
+                    try
+                    {
+                        drankDao.UpdateDrank(oldDrankNaam, newDrankNaam, isAlcoholisch, newVoorraadAantal, newPrijs);
+
+                        // Display a success message to the user
+                        MessageBox.Show("Drink updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Clear input fields
+                        ClearInputFields();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle exceptions appropriately
+                        MessageBox.Show("Error updating drink: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                // Inform the user to select a row in the ListView
+                MessageBox.Show("Please select a drink to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Optionally, perform any additional actions
+            ShowDrankVoorraadPanel();
+        }
+
+        private void ClearInputFields()
+        {
+            DrankNaamInput.Text = "";
+            AlcoholischCheckBox.Checked = false;
+            VoorraadInput.Text = "";
+            PrijsInput.Text = "";
+            listViewVoorraad.SelectedItems.Clear();
+        }
+
+        private void DeleteDrankButton_Click(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count == 1)
+            {
+                // Vraag om bevestiging
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this drink?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Verkrijg de geselecteerde drank
+                    string selectedDrinkName = listViewVoorraad.SelectedItems[0].Text;
+
+                    DrankDao drankDao = new DrankDao();
+
+                    // Voer de verwijdering uit
+                    drankDao.DeleteDrank(selectedDrinkName);
+
+                    // Wis tekstvakken
+                    ClearInputFields();
+
+                    // Vernieuw de weergegeven dranken
+                    ShowDrankVoorraadPanel();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a drink to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
