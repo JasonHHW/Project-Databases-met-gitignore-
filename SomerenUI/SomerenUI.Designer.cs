@@ -47,14 +47,16 @@
             vatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             pnlDashboard = new System.Windows.Forms.Panel();
             pnlStudents = new System.Windows.Forms.Panel();
-            StudentKamerInput = new System.Windows.Forms.TextBox();
+            studentKamerComboBox = new System.Windows.Forms.ComboBox();
             StudentKlasInput = new System.Windows.Forms.TextBox();
             StudentTelefoonnummerInput = new System.Windows.Forms.TextBox();
-            StudentNaamInput = new System.Windows.Forms.TextBox();
+            StudentAchternaamInput = new System.Windows.Forms.TextBox();
+            StudentVoornaamInput = new System.Windows.Forms.TextBox();
             StudentIdInput = new System.Windows.Forms.TextBox();
             kamerLbl = new System.Windows.Forms.Label();
             klasLbl = new System.Windows.Forms.Label();
             telefoonnummerLbl = new System.Windows.Forms.Label();
+            AchternaamLbl = new System.Windows.Forms.Label();
             NaamLbl = new System.Windows.Forms.Label();
             studentIdLbl = new System.Windows.Forms.Label();
             DeleteStudentButton = new System.Windows.Forms.Button();
@@ -316,14 +318,16 @@
             // 
             // pnlStudents
             // 
-            pnlStudents.Controls.Add(StudentKamerInput);
+            pnlStudents.Controls.Add(studentKamerComboBox);
             pnlStudents.Controls.Add(StudentKlasInput);
             pnlStudents.Controls.Add(StudentTelefoonnummerInput);
-            pnlStudents.Controls.Add(StudentNaamInput);
+            pnlStudents.Controls.Add(StudentAchternaamInput);
+            pnlStudents.Controls.Add(StudentVoornaamInput);
             pnlStudents.Controls.Add(StudentIdInput);
             pnlStudents.Controls.Add(kamerLbl);
             pnlStudents.Controls.Add(klasLbl);
             pnlStudents.Controls.Add(telefoonnummerLbl);
+            pnlStudents.Controls.Add(AchternaamLbl);
             pnlStudents.Controls.Add(NaamLbl);
             pnlStudents.Controls.Add(studentIdLbl);
             pnlStudents.Controls.Add(DeleteStudentButton);
@@ -338,37 +342,45 @@
             pnlStudents.TabIndex = 2;
             pnlStudents.Visible = false;
             // 
-            // StudentKamerInput
+            // studentKamerComboBox
             // 
-            StudentKamerInput.Location = new System.Drawing.Point(407, 381);
-            StudentKamerInput.Name = "StudentKamerInput";
-            StudentKamerInput.Size = new System.Drawing.Size(50, 27);
-            StudentKamerInput.TabIndex = 5;
+            studentKamerComboBox.FormattingEnabled = true;
+            studentKamerComboBox.Location = new System.Drawing.Point(496, 381);
+            studentKamerComboBox.Name = "studentKamerComboBox";
+            studentKamerComboBox.Size = new System.Drawing.Size(80, 28);
+            studentKamerComboBox.TabIndex = 6;
             // 
             // StudentKlasInput
             // 
-            StudentKlasInput.Location = new System.Drawing.Point(343, 379);
+            StudentKlasInput.Location = new System.Drawing.Point(432, 381);
             StudentKlasInput.Name = "StudentKlasInput";
-            StudentKlasInput.Size = new System.Drawing.Size(50, 27);
+            StudentKlasInput.Size = new System.Drawing.Size(58, 27);
             StudentKlasInput.TabIndex = 5;
             // 
             // StudentTelefoonnummerInput
             // 
-            StudentTelefoonnummerInput.Location = new System.Drawing.Point(215, 381);
+            StudentTelefoonnummerInput.Location = new System.Drawing.Point(304, 381);
             StudentTelefoonnummerInput.Name = "StudentTelefoonnummerInput";
             StudentTelefoonnummerInput.Size = new System.Drawing.Size(122, 27);
             StudentTelefoonnummerInput.TabIndex = 5;
             // 
-            // StudentNaamInput
+            // StudentAchternaamInput
             // 
-            StudentNaamInput.Location = new System.Drawing.Point(123, 381);
-            StudentNaamInput.Name = "StudentNaamInput";
-            StudentNaamInput.Size = new System.Drawing.Size(86, 27);
-            StudentNaamInput.TabIndex = 5;
+            StudentAchternaamInput.Location = new System.Drawing.Point(212, 381);
+            StudentAchternaamInput.Name = "StudentAchternaamInput";
+            StudentAchternaamInput.Size = new System.Drawing.Size(86, 27);
+            StudentAchternaamInput.TabIndex = 5;
+            // 
+            // StudentVoornaamInput
+            // 
+            StudentVoornaamInput.Location = new System.Drawing.Point(123, 381);
+            StudentVoornaamInput.Name = "StudentVoornaamInput";
+            StudentVoornaamInput.Size = new System.Drawing.Size(83, 27);
+            StudentVoornaamInput.TabIndex = 5;
             // 
             // StudentIdInput
             // 
-            StudentIdInput.Location = new System.Drawing.Point(40, 379);
+            StudentIdInput.Location = new System.Drawing.Point(40, 381);
             StudentIdInput.Name = "StudentIdInput";
             StudentIdInput.Size = new System.Drawing.Size(77, 27);
             StudentIdInput.TabIndex = 5;
@@ -376,7 +388,7 @@
             // kamerLbl
             // 
             kamerLbl.AutoSize = true;
-            kamerLbl.Location = new System.Drawing.Point(407, 345);
+            kamerLbl.Location = new System.Drawing.Point(496, 345);
             kamerLbl.Name = "kamerLbl";
             kamerLbl.Size = new System.Drawing.Size(52, 20);
             kamerLbl.TabIndex = 4;
@@ -385,7 +397,7 @@
             // klasLbl
             // 
             klasLbl.AutoSize = true;
-            klasLbl.Location = new System.Drawing.Point(343, 345);
+            klasLbl.Location = new System.Drawing.Point(432, 345);
             klasLbl.Name = "klasLbl";
             klasLbl.Size = new System.Drawing.Size(36, 20);
             klasLbl.TabIndex = 4;
@@ -394,20 +406,29 @@
             // telefoonnummerLbl
             // 
             telefoonnummerLbl.AutoSize = true;
-            telefoonnummerLbl.Location = new System.Drawing.Point(215, 345);
+            telefoonnummerLbl.Location = new System.Drawing.Point(304, 345);
             telefoonnummerLbl.Name = "telefoonnummerLbl";
             telefoonnummerLbl.Size = new System.Drawing.Size(122, 20);
             telefoonnummerLbl.TabIndex = 4;
             telefoonnummerLbl.Text = "Telefoonnummer";
             // 
+            // AchternaamLbl
+            // 
+            AchternaamLbl.AutoSize = true;
+            AchternaamLbl.Location = new System.Drawing.Point(212, 345);
+            AchternaamLbl.Name = "AchternaamLbl";
+            AchternaamLbl.Size = new System.Drawing.Size(89, 20);
+            AchternaamLbl.TabIndex = 4;
+            AchternaamLbl.Text = "Achternaam";
+            // 
             // NaamLbl
             // 
             NaamLbl.AutoSize = true;
-            NaamLbl.Location = new System.Drawing.Point(136, 345);
+            NaamLbl.Location = new System.Drawing.Point(123, 345);
             NaamLbl.Name = "NaamLbl";
-            NaamLbl.Size = new System.Drawing.Size(49, 20);
+            NaamLbl.Size = new System.Drawing.Size(77, 20);
             NaamLbl.TabIndex = 4;
-            NaamLbl.Text = "Naam";
+            NaamLbl.Text = "Voornaam";
             // 
             // studentIdLbl
             // 
@@ -426,6 +447,7 @@
             DeleteStudentButton.TabIndex = 3;
             DeleteStudentButton.Text = "Delete";
             DeleteStudentButton.UseVisualStyleBackColor = true;
+            DeleteStudentButton.Click += DeleteStudentButton_Click;
             // 
             // EditStudentButton
             // 
@@ -435,6 +457,7 @@
             EditStudentButton.TabIndex = 3;
             EditStudentButton.Text = "Edit";
             EditStudentButton.UseVisualStyleBackColor = true;
+            EditStudentButton.Click += EditStudentButton_Click;
             // 
             // AddStudentButton
             // 
@@ -444,17 +467,21 @@
             AddStudentButton.TabIndex = 3;
             AddStudentButton.Text = "Add";
             AddStudentButton.UseVisualStyleBackColor = true;
+            AddStudentButton.Click += AddStudentButton_Click;
             // 
             // listViewStudenten
             // 
             listViewStudenten.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { studentId, StudentNaam, StudentTelefoonnummer, studentKlas, studentKamer });
+            listViewStudenten.FullRowSelect = true;
             listViewStudenten.Location = new System.Drawing.Point(40, 75);
             listViewStudenten.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            listViewStudenten.MultiSelect = false;
             listViewStudenten.Name = "listViewStudenten";
             listViewStudenten.Size = new System.Drawing.Size(497, 241);
             listViewStudenten.TabIndex = 2;
             listViewStudenten.UseCompatibleStateImageBehavior = false;
             listViewStudenten.View = System.Windows.Forms.View.Details;
+            listViewStudenten.SelectedIndexChanged += listViewStudenten_SelectedIndexChanged;
             // 
             // studentId
             // 
@@ -1446,13 +1473,15 @@
         private System.Windows.Forms.Button AddStudentButton;
         private System.Windows.Forms.Label NaamLbl;
         private System.Windows.Forms.Label studentIdLbl;
-        private System.Windows.Forms.TextBox StudentKamerInput;
         private System.Windows.Forms.TextBox StudentKlasInput;
         private System.Windows.Forms.TextBox StudentTelefoonnummerInput;
-        private System.Windows.Forms.TextBox StudentNaamInput;
+        private System.Windows.Forms.TextBox StudentVoornaamInput;
         private System.Windows.Forms.TextBox StudentIdInput;
         private System.Windows.Forms.Label kamerLbl;
         private System.Windows.Forms.Label klasLbl;
         private System.Windows.Forms.Label telefoonnummerLbl;
+        private System.Windows.Forms.ComboBox studentKamerComboBox;
+        private System.Windows.Forms.TextBox StudentAchternaamInput;
+        private System.Windows.Forms.Label AchternaamLbl;
     }
 }
