@@ -132,6 +132,19 @@ namespace SomerenUI
                 MessageBox.Show("Something went wrong while loading the stock: " + e.Message);
             }
         }
+        public void ShowDeelnemersBeherenPanel()
+        {
+            Methodes.ShowPanel(pnlManageActivityParticipants);
+
+            try
+            {
+                List<Activiteit> activiteiten = GetActiviteiten();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Something went wrong while loading the activities: " + e.Message);
+            }
+        }
 
         private void DisplayDrankVoorraad(List<Drank> voorraad)
         {
@@ -174,24 +187,28 @@ namespace SomerenUI
             List<Docent> docenten = docentService.GetDocenten();
             return docenten;
         }
+
         private List<Student> GetStudents()
         {
             StudentService studentService = new StudentService();
             List<Student> students = studentService.GetStudents();
             return students;
         }
+
         private List<Kamer> GetKamers()
         {
             KamerService KamerService = new KamerService();
             List<Kamer> kamers = KamerService.GetKamers();
             return kamers;
         }
+
         private List<Activiteit> GetActiviteiten()
         {
             ActiviteitService activiteitService = new ActiviteitService();
             List<Activiteit> activiteiten = activiteitService.GetActiviteiten();
             return activiteiten;
         }
+
         private List<Drank> GetDrankjes()
         {
             DrankService drankService = new DrankService();
@@ -578,6 +595,7 @@ namespace SomerenUI
         private void omzetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOmzetPanel();
+            DisplayOmzet();
         }
 
         private void dtpDrankOmzetStart_ValueChanged(object sender, EventArgs e)
@@ -997,6 +1015,16 @@ namespace SomerenUI
             {
                 MessageBox.Show("Please select a student to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void deelnemersBeherenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowDeelnemersBeherenPanel();
+        }
+
+        private void MAPActivitySelected(object sender, EventArgs e)
+        {
+
         }
     }
 }
