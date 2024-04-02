@@ -139,6 +139,7 @@ namespace SomerenUI
             try
             {
                 List<Activiteit> activiteiten = GetActiviteiten();
+                DisplayActiviteitenMAP(activiteiten);
             }
             catch (Exception e)
             {
@@ -242,6 +243,25 @@ namespace SomerenUI
                 li.Tag = activiteit;   // link student object to listview item
 
                 listViewActiviteiten.Items.Add(li);
+
+            }
+            listViewActiviteiten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void DisplayActiviteitenMAP(List<Activiteit> activiteiten)
+        {
+            // clear the listview before filling it
+            listViewActiviteiten.Items.Clear();
+
+            foreach (Activiteit activiteit in activiteiten)
+            {
+                ListViewItem li = new ListViewItem(activiteit.ActiviteitNaam);
+                li.SubItems.Add(activiteit.ActiviteitId.ToString());
+                li.SubItems.Add(activiteit.BeginTijd.ToString("dd-MM-yyyy HH:mm"));
+                li.SubItems.Add(activiteit.EindTijd.ToString("dd-MM-yyyy HH:mm"));
+                li.Tag = activiteit;   // link student object to listview item
+
+                listViewMAPActivities.Items.Add(li);
 
             }
             listViewActiviteiten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -414,6 +434,31 @@ namespace SomerenUI
             li.SubItems.Add(Convert.ToString(studentsOrdered));
             listViewDrankOmzet.Items.Add(li);
             listViewDrankOmzet.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+        }
+
+        private void DisplayStudentsMAP(Activiteit activiteit)
+        {
+            DeelnameService deelnameService = new DeelnameService();
+            List<Student> deelnemers = deelnameService.GetDeelnemersFromActiviteitId(activiteit);
+            List<Student> nietDeelnemers = deelnameService.GetNietDeelnemers(activiteit);
+
+            listViewMAPParticipatingStudents.Clear();
+            listViewMAPNonParticipatingStudents.Clear();
+
+            foreach (Student student in deelnemers)
+            {
+                ListViewItem li = new ListViewItem(student.Naam);
+                li.SubItems.Add(student.StudentId.ToString());
+                li.Tag = student;
+                listViewMAPParticipatingStudents.Items.Add(li);
+            }
+            foreach (Student student in nietDeelnemers)
+            {
+                ListViewItem li = new ListViewItem(student.Naam);
+                li.SubItems.Add(student.StudentId.ToString());
+                li.Tag = student;
+                listViewMAPNonParticipatingStudents.Items.Add(li);
+            }
         }
 
         private void dashboardToolStripMenuItem1_Click(object sender, System.EventArgs e)
@@ -1024,7 +1069,7 @@ namespace SomerenUI
 
         private void MAPActivitySelected(object sender, EventArgs e)
         {
-
+            DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
         }
     }
 }
