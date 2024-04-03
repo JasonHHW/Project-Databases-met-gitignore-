@@ -163,7 +163,7 @@ namespace SomerenUI
                     listViewItem.SubItems.Add(item.IsAlcoholisch ? "Yes" : "No");
                     listViewItem.SubItems.Add(item.Voorraad.ToString());
                     listViewItem.SubItems.Add(item.Aantal_Geconsumeerd.ToString());
-                    listViewItem.SubItems.Add(item.Prijs.ToString("�0.00"));
+                    listViewItem.SubItems.Add(item.Prijs.ToString("€0.00"));
 
                     // Add stock status index as a subitem
                     listViewItem.SubItems.Add((item.Voorraad < 10) ? "Insufficient" : "Sufficient");

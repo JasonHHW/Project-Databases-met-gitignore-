@@ -13,9 +13,11 @@ namespace SomerenDAL
     {
         public List<Drank> GetAllDrankjes()
         {
-            string query = "SELECT Drank.Dranknaam, Drank.IsAlcoholisch, Drank.AantalGeconsumeerd, Voorraad.VoorraadAantal, Drank.Prijs " +
-                        "FROM [Drank] " +
-                        "join Voorraad on Drank.Dranknaam = Voorraad.Dranknaam";
+            string query = "SELECT d.Dranknaam, d.IsAlcoholisch, v.VoorraadAantal, COALESCE(SUM(oi.Aantal), 0) AS AantalGeconsumeerd, d.Prijs " +
+                            "FROM Drank d " +
+                            "JOIN Voorraad v ON d.Dranknaam = v.Dranknaam " +
+                            "LEFT JOIN OrderItem oi ON d.Dranknaam = oi.Dranknaam " +
+                            "GROUP BY d.Dranknaam, d.IsAlcoholisch, v.VoorraadAantal, d.Prijs;";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
