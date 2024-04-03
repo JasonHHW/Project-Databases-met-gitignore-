@@ -10,6 +10,11 @@ using System.Text.RegularExpressions;
 using System.ComponentModel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using System.Linq;
+using SomerenDAL;
+
 namespace SomerenUI
 {
     public partial class SomerenUI : Form
@@ -25,6 +30,7 @@ namespace SomerenUI
 
             Methodes.ShowPanel(pnlDashboard);
         }
+
         private void ShowStudentsPanel()
         {
 
@@ -33,15 +39,15 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Student> students = GetStudents();
+                List<Student> students = Methodes.GetStudents();
                 DisplayStudents(students);
+                FillStudentKamerComboBox();
             }
             catch (Exception e)
             {
                 MessageBox.Show("Something went wrong while loading the students: " + e.Message);
             }
         }
-
 
         private void ShowActiviteitenPanel()
         {
@@ -50,8 +56,9 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Activiteit> activiteiten = GetActiviteiten();
+                List<Activiteit> activiteiten = Methodes.GetActiviteiten();
                 DisplayActiviteiten(activiteiten);
+
             }
             catch (Exception e)
             {
@@ -59,6 +66,7 @@ namespace SomerenUI
             }
 
         }
+
         private void ShowKamersPanel()
         {
             Methodes.ShowPanel(pnlKamers);
@@ -66,8 +74,10 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Kamer> kamers = GetKamers();
+                List<Kamer> kamers = Methodes.GetKamers();
                 DisplayKamers(kamers);
+
+
             }
             catch (Exception e)
             {
@@ -76,16 +86,13 @@ namespace SomerenUI
 
         }
 
-
-
-
         private void ShowDrankBestellingenPanel()
         {
             Methodes.ShowPanel(pnlDrankBestellingen);
             try
             {
-                List<Drank> drankjes = GetDrankjes();
-                List<Student> students = GetStudents();
+                List<Drank> drankjes = Methodes.GetDrankjes();
+                List<Student> students = Methodes.GetStudents();
 
                 DisplayDrankjes(drankjes);
                 Methodes.DisplayStudents(students, listViewBestellingenStudenten);
@@ -97,7 +104,6 @@ namespace SomerenUI
             }
         }
 
-
         private void ShowTeachersPanel()
         {
             Methodes.ShowPanel(pnlDocenten);
@@ -105,7 +111,7 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Docent> docenten = GetDocenten();
+                List<Docent> docenten = Methodes.GetDocenten();
                 DisplayTeachers(docenten);
             }
             catch (Exception e)
@@ -114,47 +120,62 @@ namespace SomerenUI
             }
         }
 
+        private void ShowDrankVoorraadPanel()
+        {
+            Methodes.ShowPanel(pnlDrankVoorraad);
+
+            try
+            {
+                // get and display all students
+                List<Drank> drankjes = Methodes.GetDrankjes();
+                DisplayDrankVoorraad(drankjes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Something went wrong while loading the stock: " + e.Message);
+            }
+        }
+
+        private void DisplayDrankVoorraad(List<Drank> voorraad)
+        {
+            try
+            {
+                var orderedDrankList = voorraad.OrderBy(d => d.Voorraad).ToList();
+
+                // Clear existing items
+                listViewVoorraad.Items.Clear();
+
+                // Populate the ListView with drink stock information
+                foreach (Drank item in orderedDrankList)
+                {
+                    ListViewItem listViewItem = new ListViewItem(item.DrankNaam);
+                    listViewItem.SubItems.Add(item.IsAlcoholisch ? "Yes" : "No");
+                    listViewItem.SubItems.Add(item.Voorraad.ToString());
+                    listViewItem.SubItems.Add(item.Aantal_Geconsumeerd.ToString());
+                    listViewItem.SubItems.Add(item.Prijs.ToString("�0.00"));
+
+                    // Add stock status index as a subitem
+                    listViewItem.SubItems.Add((item.Voorraad < 10) ? "Insufficient" : "Sufficient");
+
+                    listViewVoorraad.Items.Add(listViewItem);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading drink stock information: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public void ShowOmzetPanel()
         {
             Methodes.ShowPanel(pnlDrankOmzet);
         }
 
-        private List<Docent> GetDocenten()
-        {
-            DocentService docentService = new DocentService();
-            List<Docent> docenten = docentService.GetDocenten();
-            return docenten;
-        }
-        private List<Student> GetStudents()
-        {
-            StudentService studentService = new StudentService();
-            List<Student> students = studentService.GetStudents();
-            return students;
-        }
-        private List<Kamer> GetKamers()
-        {
-            KamerService KamerService = new KamerService();
-            List<Kamer> kamers = KamerService.GetKamers();
-            return kamers;
-        }
-        private List<Activiteit> GetActiviteiten()
-        {
-            ActiviteitService activiteitService = new ActiviteitService();
-            List<Activiteit> activiteiten = activiteitService.GetActiviteiten();
-            return activiteiten;
-        }
-        private List<Drank> GetDrankjes()
-        {
-            DrankService drankService = new DrankService();
-            List<Drank> drankjes = drankService.GetDrankjes();
-            return drankjes;
-        }
-        private List<OrderItem> GetOmzetItems()
+
+        private int GetOmzetTotalDrankjes()
         {
             OrderItemService orderItemService = new OrderItemService();
-            List<OrderItem> orderItems = orderItemService.GetOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
-
-            return orderItems;
+            return orderItemService.CountOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
         }
 
         public int GetAmountOfStudentsWithOrders()
@@ -162,7 +183,6 @@ namespace SomerenUI
             BestellingService bestellingService = new BestellingService();
             return bestellingService.GetAmountOfStudentsOmzet(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value).Count;
         }
-
 
         private void DisplayActiviteiten(List<Activiteit> activiteiten)
         {
@@ -183,6 +203,44 @@ namespace SomerenUI
             listViewActiviteiten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
+        private void DisplayBegeleiding(List<Docent> docenten)
+        {
+            listViewBegeleiders.Items.Clear();
+
+
+            foreach (Docent begeleider in docenten)
+            {
+                ListViewItem li = new ListViewItem(begeleider.DocentId.ToString());
+                li.SubItems.Add(begeleider.Naam);
+
+                li.Tag = begeleider;   // link student object to listview item
+
+
+                listViewBegeleiders.Items.Add(li);
+
+            }
+
+            listViewBegeleiders.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+        }
+
+        private void DisplayVrijeDocenten(List<Docent> docenten)
+        {
+            listViewVrijeDocenten.Items.Clear();
+            foreach (Docent vrijedocent in docenten)
+            {
+                ListViewItem li = new ListViewItem(vrijedocent.DocentId.ToString());
+                li.SubItems.Add(vrijedocent.Naam);
+
+                li.Tag = vrijedocent;   // link student object to listview item
+
+
+                listViewVrijeDocenten.Items.Add(li);
+
+            }
+            listViewVrijeDocenten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+        }
+
         private void DisplayDrankjes(List<Drank> drankjes)
         {
             listViewBestellingenDrankjes.Items.Clear();
@@ -199,6 +257,7 @@ namespace SomerenUI
             listViewBestellingenDrankjes.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
         }
+
         private void DisplayKamers(List<Kamer> kamers)
         {
             // clear the listview before filling it
@@ -218,23 +277,25 @@ namespace SomerenUI
             }
             listViewKamers.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
+
         private void DisplayStudents(List<Student> students)
         {
             // clear the listview before filling it
             listViewStudenten.Items.Clear();
 
-
             foreach (Student student in students)
             {
-                ListViewItem li = new ListViewItem(student.Naam);
+                ListViewItem li = new ListViewItem(student.StudentId.ToString());
 
+                li.SubItems.Add(student.Naam);
+                li.SubItems.Add(student.Telefoonnummer);
+                li.SubItems.Add(student.Klas);
+                li.SubItems.Add(student.Kamer);
 
-                li.Tag = student;   // link student object to listview item
                 listViewStudenten.Items.Add(li);
-
             }
-            //   listViewStudents.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
+
         private void DisplayTeachers(List<Docent> docenten)
         {
             listViewDocenten.Items.Clear();
@@ -306,6 +367,7 @@ namespace SomerenUI
             }
             else { MessageBox.Show("Gebruik alstublieft een valide getal"); }
         }
+
         private void DisplayTotaalBesteld()
         {
 
@@ -326,29 +388,23 @@ namespace SomerenUI
             }
             else { MessageBox.Show("Selecteer alstublieft 1 student en 1 drankje"); }
         }
+
         private void ResetBestelling()
         {
             listViewTotaalBesteld.Items.Clear();
             textBoxHoeveelheidDrank.Text = "";
-            labelPrijs.Text = "$0,00";
+            labelPrijs.Text = 0.00.ToString("C", new CultureInfo("nl-NL"));
         }
 
         private void DisplayOmzet()
         {
             listViewDrankOmzet.Items.Clear();
-
-            List<OrderItem> orderItems = GetOmzetItems();
             int studentsOrdered = GetAmountOfStudentsWithOrders();
             double price = 2.00;
-            int totalDrinksSold = 0;
-            double turnover = 0.00;
-            foreach (OrderItem orderItem in orderItems)
-            {
-                totalDrinksSold += orderItem.Aantal;
-                turnover += orderItem.Aantal * price;
-            }
+            int totalDrinksSold = GetOmzetTotalDrankjes();
+            double turnover = totalDrinksSold * price;
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
-            li.SubItems.Add("$ " + String.Format("{0,00}", turnover));
+            li.SubItems.Add(turnover.ToString("C", new CultureInfo("nl-NL")));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
             listViewDrankOmzet.Items.Add(li);
             listViewDrankOmzet.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -370,7 +426,6 @@ namespace SomerenUI
             ShowStudentsPanel();
         }
 
-
         private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -381,29 +436,20 @@ namespace SomerenUI
             ShowTeachersPanel();
         }
 
-
         private void roomsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowKamersPanel();
         }
 
-
         private void activitiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowActiviteitenPanel();
+
         }
-
-
-
 
         private void drankBestellingenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowDrankBestellingenPanel();
         }
-
-
-
-
 
         private void listViewBestellingenStudenten_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
@@ -502,8 +548,8 @@ namespace SomerenUI
 
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
-                      
-                        List<Drank> drankjes = GetDrankjes();
+
+                        List<Drank> drankjes = Methodes.GetDrankjes();
                         DisplayDrankjes(drankjes);
 
 
@@ -563,24 +609,516 @@ namespace SomerenUI
             }
         }
 
-
-
-        private void drankToolStripMenuItem_Click(object sender, EventArgs e)
+        private void listViewBestellingenDrankjes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
         private void drankVoorraadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            ShowDrankVoorraadPanel();
         }
-
-
-
 
         private void bttnOrder_Click(object sender, EventArgs e)
         {
             DisplayTotaalBesteld();
+        }
+
+        private void drankToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddDrankButton_Click(object sender, EventArgs e)
+        {
+            string drinkName = DrankNaamInput.Text;
+            bool isAlcoholisch = AlcoholischCheckBox.Checked;
+            int voorraadAantal = Convert.ToInt32(VoorraadInput.Text);
+            decimal prijs = Convert.ToDecimal(PrijsInput.Text);
+
+            // Show confirmation message
+            DialogResult result = MessageBox.Show($"Are you sure you want to add {voorraadAantal} {drinkName} with Price �{prijs:F2}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                // Instantiate DrankDao
+                DrankDao drankDao = new DrankDao();
+
+                try
+                {
+                    // Add the drink to the database
+                    drankDao.AddDrink(drinkName, isAlcoholisch, voorraadAantal, prijs);
+
+                    // Display success message
+                    MessageBox.Show("Drink added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Clear input fields
+                    ClearVoorraadInputFields();
+                }
+                catch (Exception ex)
+                {
+                    // Display error message
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                // Optionally, perform any additional actions
+                ShowDrankVoorraadPanel();
+            }
+        }
+
+        private void listViewVoorraad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedItem = listViewVoorraad.SelectedItems[0];
+
+                // Extract data from the selected ListViewItem
+                string drankNaam = selectedItem.Text;
+                string isAlcoholischText = selectedItem.SubItems[1].Text;
+
+                // Convert text representation of "Alcoholisch" to boolean
+                bool isAlcoholisch = isAlcoholischText.Equals("Yes", StringComparison.OrdinalIgnoreCase);
+
+                // Update controls with selected data
+                DrankNaamInput.Text = drankNaam;
+                AlcoholischCheckBox.Checked = isAlcoholisch;
+
+                // Parse VoorraadAantal (stock quantity)
+                int voorraadAantal;
+                if (!int.TryParse(selectedItem.SubItems[2].Text, out voorraadAantal))
+                {
+                    // Handle parsing error gracefully
+                    MessageBox.Show("Invalid stock quantity.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Parse Prijs (price)
+                decimal prijs;
+                if (!decimal.TryParse(selectedItem.SubItems[4].Text.Replace("� ", ""),
+                    NumberStyles.Currency, CultureInfo.CurrentCulture, out prijs))
+                {
+                    // Handle parsing error gracefully
+                    MessageBox.Show("Invalid price.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Update controls with selected data
+                DrankNaamInput.Text = drankNaam;
+                AlcoholischCheckBox.Checked = isAlcoholisch;
+                VoorraadInput.Text = voorraadAantal.ToString();
+                PrijsInput.Text = prijs.ToString();
+            }
+        }
+
+        private void EditDrankButton_Click(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedItem = listViewVoorraad.SelectedItems[0];
+
+                // Get the old data from the selected item
+                string oldDrankNaam = selectedItem.Text;
+                string oldVoorraadAantal = selectedItem.SubItems[2].Text;
+                string oldPrijs = selectedItem.SubItems[4].Text.Replace("� ", ""); // Remove currency symbol before parsing
+
+                // Get new data from textboxes
+                string newDrankNaam = DrankNaamInput.Text;
+                bool isAlcoholisch = AlcoholischCheckBox.Checked;
+                int newVoorraadAantal = int.Parse(VoorraadInput.Text);
+                decimal newPrijs = decimal.Parse(PrijsInput.Text);
+
+                // Confirmation message
+                DialogResult result = MessageBox.Show($"Are you sure you want to edit:\n{oldVoorraadAantal} {oldDrankNaam} with price �{oldPrijs:F2}\nto:\n{newVoorraadAantal} {newDrankNaam} with price �{newPrijs:F2}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Call the DAO method to update the drink
+                    DrankDao drankDao = new DrankDao();
+                    try
+                    {
+                        drankDao.UpdateDrank(oldDrankNaam, newDrankNaam, isAlcoholisch, newVoorraadAantal, newPrijs);
+
+                        // Display a success message to the user
+                        MessageBox.Show("Drink updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Clear input fields
+                        ClearVoorraadInputFields();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle exceptions appropriately
+                        MessageBox.Show("Error updating drink: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                // Inform the user to select a row in the ListView
+                MessageBox.Show("Please select a drink to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Optionally, perform any additional actions
+            ShowDrankVoorraadPanel();
+        }
+
+        private void ClearVoorraadInputFields()
+        {
+            DrankNaamInput.Text = "";
+            AlcoholischCheckBox.Checked = false;
+            VoorraadInput.Text = "";
+            PrijsInput.Text = "";
+            listViewVoorraad.SelectedItems.Clear();
+        }
+
+        private void ClearStudentsInputFields()
+        {
+            StudentIdInput.Text = "";
+            StudentVoornaamInput.Text = "";
+            StudentAchternaamInput.Text = "";
+            StudentTelefoonnummerInput.Text = "";
+            StudentKlasInput.Text = "";
+            studentKamerComboBox.SelectedIndex = -1;
+            listViewStudenten.SelectedItems.Clear();
+        }
+
+        private void DeleteDrankButton_Click(object sender, EventArgs e)
+        {
+            if (listViewVoorraad.SelectedItems.Count == 1)
+            {
+                // Vraag om bevestiging
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this drink?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Verkrijg de geselecteerde drank
+                    string selectedDrinkName = listViewVoorraad.SelectedItems[0].Text;
+
+                    DrankDao drankDao = new DrankDao();
+
+                    // Voer de verwijdering uit
+                    drankDao.DeleteDrank(selectedDrinkName);
+
+                    // Wis tekstvakken
+                    ClearVoorraadInputFields();
+
+                    // Vernieuw de weergegeven dranken
+                    ShowDrankVoorraadPanel();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a drink to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void listViewStudenten_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewStudenten.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedStudent = listViewStudenten.SelectedItems[0];
+
+                // Extract data from the selected ListViewItem
+                int studentId = int.Parse(selectedStudent.Text);
+                string studentNaam = selectedStudent.SubItems[1].Text;
+                string studentTelefoonnummer = selectedStudent.SubItems[2].Text;
+                string studentKlas = selectedStudent.SubItems[3].Text;
+                string studentKamer = selectedStudent.SubItems[4].Text;
+
+                string[] parts = studentNaam.Split(new char[] { ' ' }, 2);
+
+                string studentVoornaam = parts[0];
+                string studentAchternaam = parts.Length > 1 ? parts[1] : "";
+
+                // Update controls with selected data
+                StudentIdInput.Text = studentId.ToString();
+                StudentVoornaamInput.Text = studentVoornaam;
+                StudentAchternaamInput.Text = studentAchternaam;
+                StudentTelefoonnummerInput.Text = studentTelefoonnummer;
+                StudentKlasInput.Text = studentKlas;
+
+
+                int index = studentKamerComboBox.FindStringExact(studentKamer);
+                if (index != -1)
+                {
+                    studentKamerComboBox.SelectedIndex = index;
+                }
+                else
+                {
+                    studentKamerComboBox.SelectedIndex = -1;
+                }
+            }
+        }
+
+        private void AddStudentButton_Click(object sender, EventArgs e)
+        {
+            int studentId = int.Parse(StudentIdInput.Text);
+            string studentVoornaam = StudentVoornaamInput.Text;
+            string studentAchternaam = StudentAchternaamInput.Text;
+            string studentTelefoonnummer = StudentTelefoonnummerInput.Text;
+            string studentKlas = StudentKlasInput.Text;
+            string studentKamer = studentKamerComboBox.SelectedItem.ToString();
+
+            // Show confirmation message
+            DialogResult result = MessageBox.Show($"Are you sure you want to add {studentVoornaam} {studentAchternaam} with StudentId {studentId}, phonenumber {studentTelefoonnummer}, in class {studentKlas} and room {studentKamer}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                // Instantiate StudentDao
+                StudentDao studentDao = new StudentDao();
+
+                try
+                {
+                    // Add the student to the database
+                    studentDao.AddStudent(studentId, studentVoornaam, studentAchternaam, studentTelefoonnummer, studentKlas, studentKamer);
+
+                    // Display success message
+                    MessageBox.Show("Student added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Clear input fields
+                    ClearStudentsInputFields();
+                }
+                catch (Exception ex)
+                {
+                    // Display error message
+                    MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                // Optionally, perform any additional actions
+                ShowStudentsPanel();
+            }
+        }
+        private void FillStudentKamerComboBox()
+        {
+            // Instantiate StudentDao
+            StudentDao studentDao = new StudentDao();
+
+            try
+            {
+                // Get all student rooms from the database
+                List<string> studentRooms = studentDao.GetStudentRooms();
+
+                // Clear existing items in the ComboBox
+                studentKamerComboBox.Items.Clear();
+
+                // Add retrieved student rooms to the ComboBox
+                foreach (string room in studentRooms)
+                {
+                    studentKamerComboBox.Items.Add(room);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                MessageBox.Show("An error occurred while fetching student rooms: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EditStudentButton_Click(object sender, EventArgs e)
+        {
+            if (listViewStudenten.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                ListViewItem selectedStudent = listViewStudenten.SelectedItems[0];
+
+                // Get the old data from the selected item
+                int studentId = int.Parse(selectedStudent.Text);
+                string studentNaam = selectedStudent.SubItems[1].Text;
+                string studentTelefoonnummer = selectedStudent.SubItems[2].Text;
+                string studentKlas = selectedStudent.SubItems[3].Text;
+                string studentKamer = selectedStudent.SubItems[4].Text;
+
+                // Get new data from textboxes
+                int newStudentId = int.Parse(StudentIdInput.Text);
+                string newStudentVoornaam = StudentVoornaamInput.Text;
+                string newStudentAchternaam = StudentAchternaamInput.Text;
+                string newStudentTelefoonnummer = StudentTelefoonnummerInput.Text;
+                string newStudentKlas = StudentKlasInput.Text;
+                string newStudentKamer = studentKamerComboBox.SelectedItem.ToString();
+
+                // Confirmation message
+                DialogResult result = MessageBox.Show($"Are you sure you want to edit:\n{studentNaam} with Id {studentId} with phonenumber {studentTelefoonnummer} in class {studentKlas} and room {studentKamer}" +
+                                                        $"\nto:\n" +
+                                                        $"{newStudentVoornaam} {newStudentAchternaam} with Id {newStudentId} with phonenumber {newStudentTelefoonnummer} in class {newStudentKlas} and room {newStudentKamer}?",
+                                           "Confirmation",
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Call the DAO method to update the student
+                    StudentDao studentDao = new StudentDao();
+                    try
+                    {
+                        studentDao.UpdateStudent(studentId, newStudentId, newStudentVoornaam, newStudentAchternaam, newStudentTelefoonnummer, newStudentKlas, newStudentKamer);
+
+                        // Display a success message to the user
+                        MessageBox.Show("Student updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Clear input fields
+                        ClearStudentsInputFields();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Handle exceptions appropriately
+                        MessageBox.Show("Error updating Student: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                // Inform the user to select a row in the ListView
+                MessageBox.Show("Please select a student to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            // Optionally, perform any additional actions
+            ShowStudentsPanel();
+        }
+
+        private void DeleteStudentButton_Click(object sender, EventArgs e)
+        {
+            if (listViewStudenten.SelectedItems.Count == 1)
+            {
+                // Vraag om bevestiging
+                DialogResult result = MessageBox.Show("Are you sure you want to delete this student?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Verkrijg de geselecteerde studentId
+                    int selectedStudentId = int.Parse(listViewStudenten.SelectedItems[0].Text);
+
+                    StudentDao studentDao = new StudentDao();
+
+                    // Voer de verwijdering uit
+                    studentDao.DeleteStudent(selectedStudentId);
+
+                    // Wis tekstvakken
+                    ClearStudentsInputFields();
+
+                    // Vernieuw de weergegeven dranken
+                    ShowStudentsPanel();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a student to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void activiteitenOverviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowActiviteitenPanel();
+        }
+
+        private void UpdateBegeleiders()
+        {
+            if (listViewActiviteiten.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                Activiteit selectedactiviteit = (Activiteit)listViewActiviteiten.SelectedItems[0].Tag;
+
+                DisplayBegeleiding(Methodes.GetBegeleiding(selectedactiviteit));
+                DisplayVrijeDocenten(Methodes.GetVrijeDocent(selectedactiviteit));
+            }
+        }
+
+        private void listViewActiviteiten_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateBegeleiders();
+
+        }
+
+        private void listViewVrijeDocenten_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        private ListViewItem GetSelect(System.Windows.Forms.ListView listView)
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                return listView.SelectedItems[0];
+            }
+            return null;
+        }
+
+
+        private void listViewVrijeDocenten_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                ListViewItem draggedItem = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+
+
+                if (draggedItem.ListView == listViewBegeleiders)
+                {
+
+                    Docent docent = (Docent)GetSelect(listViewBegeleiders).Tag;
+                    Activiteit activiteit = (Activiteit)GetSelect(listViewActiviteiten).Tag;
+
+                    DialogResult result = MessageBox.Show($"Weet je zeker dat je {docent.Naam} {activiteit.ActiviteitNaam} niet meer wil laten begeleiden? ", "Bevestig", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DocentService docentService = new DocentService();
+
+
+                        docentService.MakeFree(docent, activiteit);
+                        UpdateBegeleiders();
+                    }
+                }
+            }
+            
+        }
+       private void listViewVrijeDocenten_DragEnter(object sender, DragEventArgs e)
+        {
+           
+            e.Effect = DragDropEffects.Move; 
+          
+
+
+        } 
+
+        private void listViewVrijeDocenten_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            listViewVrijeDocenten.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void listViewBegeleiders_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move; 
+         
+
+        } 
+        private void listViewBegeleiders_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            listViewBegeleiders.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void listViewBegeleiders_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                ListViewItem draggedItem = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+
+
+                if (draggedItem.ListView == listViewVrijeDocenten)
+                {
+                    DocentService docentService = new DocentService();
+                    Docent docent = (Docent)GetSelect(listViewVrijeDocenten).Tag;
+                    Activiteit activiteit = (Activiteit)GetSelect(listViewActiviteiten).Tag;
+
+                    docentService.MakeBusy(docent, activiteit);
+                    UpdateBegeleiders();
+                }
+            }
+            
+
+           
         }
     }
 }

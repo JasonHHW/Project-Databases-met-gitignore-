@@ -8,11 +8,9 @@ namespace SomerenModel
 {
     public class Drank
     {
-        
-       
-       public string DrankNaam { get; set; }
+        public string DrankNaam { get; set; }
         public bool IsAlcoholisch {  get; set; }
-        public int Prijs = 2;
+        public decimal Prijs {  get; set; }
         public int Voorraad { get; set; }
         public string Type
         {

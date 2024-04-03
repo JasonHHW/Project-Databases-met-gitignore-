@@ -17,6 +17,19 @@ namespace SomerenService
             docentdb = new DocentDao();
         }
 
+        public List<Docent> GetBegeleiders(Activiteit activiteit)
+        {
+            return docentdb.GetBegeleiding(activiteit);
+        }
+        public List<Docent> GetVrijeDocenten(Activiteit activiteit)
+        {
+            return docentdb.GetVrijeDocenten(activiteit);
+        }
+
+        public void MakeFree(Docent docent, Activiteit activiteit)
+        { docentdb.DeleteDeelname(docent, activiteit); }
+        public void MakeBusy(Docent docent, Activiteit activiteit)
+        { docentdb.InsertDeelname(docent, activiteit); }
         public List<Docent> GetDocenten()
         {
             List<Docent> docenten = docentdb.GetAllDocents();
