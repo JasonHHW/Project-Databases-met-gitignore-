@@ -34,7 +34,7 @@ namespace SomerenDAL
         public void AddOrderitem(OrderItem item)
         {
             string query = "INSERT into [OrderItem] (BestellingId, Dranknaam, Aantal, ItemId) VALUES (@BestellingId, @Dranknaam, @Aantal, @ItemId)";
-            SqlParameter[] sqlParameters = new SqlParameter[]
+            SqlParameter[] sqlParameters = new SqlParameter[4]
             {
         new SqlParameter("@BestellingId", item.BestellingId),
         new SqlParameter("@Dranknaam", item.DrankNaam),

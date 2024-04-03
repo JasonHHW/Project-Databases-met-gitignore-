@@ -39,7 +39,7 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Student> students = GetStudents();
+                List<Student> students = Methodes.GetStudents();
                 DisplayStudents(students);
                 FillStudentKamerComboBox();
             }
@@ -56,8 +56,9 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Activiteit> activiteiten = GetActiviteiten();
+                List<Activiteit> activiteiten = Methodes.GetActiviteiten();
                 DisplayActiviteiten(activiteiten);
+
             }
             catch (Exception e)
             {
@@ -73,8 +74,10 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Kamer> kamers = GetKamers();
+                List<Kamer> kamers = Methodes.GetKamers();
                 DisplayKamers(kamers);
+
+
             }
             catch (Exception e)
             {
@@ -88,8 +91,8 @@ namespace SomerenUI
             Methodes.ShowPanel(pnlDrankBestellingen);
             try
             {
-                List<Drank> drankjes = GetDrankjes();
-                List<Student> students = GetStudents();
+                List<Drank> drankjes = Methodes.GetDrankjes();
+                List<Student> students = Methodes.GetStudents();
 
                 DisplayDrankjes(drankjes);
                 Methodes.DisplayStudents(students, listViewBestellingenStudenten);
@@ -108,7 +111,7 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Docent> docenten = GetDocenten();
+                List<Docent> docenten = Methodes.GetDocenten();
                 DisplayTeachers(docenten);
             }
             catch (Exception e)
@@ -124,25 +127,12 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List<Drank> drankjes = GetDrankjes();
+                List<Drank> drankjes = Methodes.GetDrankjes();
                 DisplayDrankVoorraad(drankjes);
             }
             catch (Exception e)
             {
                 MessageBox.Show("Something went wrong while loading the stock: " + e.Message);
-            }
-        }
-        public void ShowDeelnemersBeherenPanel()
-        {
-            Methodes.ShowPanel(pnlManageActivityParticipants);
-
-            try
-            {
-                List<Activiteit> activiteiten = GetActiviteiten();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Something went wrong while loading the activities: " + e.Message);
             }
         }
 
@@ -181,40 +171,6 @@ namespace SomerenUI
             Methodes.ShowPanel(pnlDrankOmzet);
         }
 
-        private List<Docent> GetDocenten()
-        {
-            DocentService docentService = new DocentService();
-            List<Docent> docenten = docentService.GetDocenten();
-            return docenten;
-        }
-
-        private List<Student> GetStudents()
-        {
-            StudentService studentService = new StudentService();
-            List<Student> students = studentService.GetStudents();
-            return students;
-        }
-
-        private List<Kamer> GetKamers()
-        {
-            KamerService KamerService = new KamerService();
-            List<Kamer> kamers = KamerService.GetKamers();
-            return kamers;
-        }
-
-        private List<Activiteit> GetActiviteiten()
-        {
-            ActiviteitService activiteitService = new ActiviteitService();
-            List<Activiteit> activiteiten = activiteitService.GetActiviteiten();
-            return activiteiten;
-        }
-
-        private List<Drank> GetDrankjes()
-        {
-            DrankService drankService = new DrankService();
-            List<Drank> drankjes = drankService.GetDrankjes();
-            return drankjes;
-        }
 
         private int GetOmzetTotalDrankjes()
         {
@@ -245,6 +201,44 @@ namespace SomerenUI
 
             }
             listViewActiviteiten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void DisplayBegeleiding(List<Docent> docenten)
+        {
+            listViewBegeleiders.Items.Clear();
+
+
+            foreach (Docent begeleider in docenten)
+            {
+                ListViewItem li = new ListViewItem(begeleider.DocentId.ToString());
+                li.SubItems.Add(begeleider.Naam);
+
+                li.Tag = begeleider;   // link student object to listview item
+
+
+                listViewBegeleiders.Items.Add(li);
+
+            }
+
+            listViewBegeleiders.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+        }
+
+        private void DisplayVrijeDocenten(List<Docent> docenten)
+        {
+            listViewVrijeDocenten.Items.Clear();
+            foreach (Docent vrijedocent in docenten)
+            {
+                ListViewItem li = new ListViewItem(vrijedocent.DocentId.ToString());
+                li.SubItems.Add(vrijedocent.Naam);
+
+                li.Tag = vrijedocent;   // link student object to listview item
+
+
+                listViewVrijeDocenten.Items.Add(li);
+
+            }
+            listViewVrijeDocenten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void DisplayDrankjes(List<Drank> drankjes)
@@ -449,7 +443,7 @@ namespace SomerenUI
 
         private void activitiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowActiviteitenPanel();
+
         }
 
         private void drankBestellingenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -555,7 +549,7 @@ namespace SomerenUI
                         listViewBestellingenStudenten.SelectedItems[0].Selected = false;
                         listViewBestellingenDrankjes.SelectedItems[0].Selected = false;
 
-                        List<Drank> drankjes = GetDrankjes();
+                        List<Drank> drankjes = Methodes.GetDrankjes();
                         DisplayDrankjes(drankjes);
 
 
@@ -595,7 +589,6 @@ namespace SomerenUI
         private void omzetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOmzetPanel();
-            DisplayOmzet();
         }
 
         private void dtpDrankOmzetStart_ValueChanged(object sender, EventArgs e)
@@ -1017,14 +1010,115 @@ namespace SomerenUI
             }
         }
 
-        private void deelnemersBeherenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void activiteitenOverviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowDeelnemersBeherenPanel();
+            ShowActiviteitenPanel();
         }
 
-        private void MAPActivitySelected(object sender, EventArgs e)
+        private void UpdateBegeleiders()
+        {
+            if (listViewActiviteiten.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                Activiteit selectedactiviteit = (Activiteit)listViewActiviteiten.SelectedItems[0].Tag;
+
+                DisplayBegeleiding(Methodes.GetBegeleiding(selectedactiviteit));
+                DisplayVrijeDocenten(Methodes.GetVrijeDocent(selectedactiviteit));
+            }
+        }
+
+        private void listViewActiviteiten_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateBegeleiders();
+
+        }
+
+        private void listViewVrijeDocenten_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+        private ListViewItem GetSelect(System.Windows.Forms.ListView listView)
+        {
+            if (listView.SelectedItems.Count > 0)
+            {
+                // Get the selected item
+                return listView.SelectedItems[0];
+            }
+            return null;
+        }
+
+
+        private void listViewVrijeDocenten_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                ListViewItem draggedItem = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+
+
+                if (draggedItem.ListView == listViewBegeleiders)
+                {
+
+                    Docent docent = (Docent)GetSelect(listViewBegeleiders).Tag;
+                    Activiteit activiteit = (Activiteit)GetSelect(listViewActiviteiten).Tag;
+
+                    DialogResult result = MessageBox.Show($"Weet je zeker dat je {docent.Naam} {activiteit.ActiviteitNaam} niet meer wil laten begeleiden? ", "Bevestig", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        DocentService docentService = new DocentService();
+
+
+                        docentService.MakeFree(docent, activiteit);
+                        UpdateBegeleiders();
+                    }
+                }
+            }
+            
+        }
+       private void listViewVrijeDocenten_DragEnter(object sender, DragEventArgs e)
+        {
+           
+            e.Effect = DragDropEffects.Move; 
+          
+
+
+        } 
+
+        private void listViewVrijeDocenten_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            listViewVrijeDocenten.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void listViewBegeleiders_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move; 
+         
+
+        } 
+        private void listViewBegeleiders_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            listViewBegeleiders.DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void listViewBegeleiders_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                ListViewItem draggedItem = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+
+
+                if (draggedItem.ListView == listViewVrijeDocenten)
+                {
+                    DocentService docentService = new DocentService();
+                    Docent docent = (Docent)GetSelect(listViewVrijeDocenten).Tag;
+                    Activiteit activiteit = (Activiteit)GetSelect(listViewActiviteiten).Tag;
+
+                    docentService.MakeBusy(docent, activiteit);
+                    UpdateBegeleiders();
+                }
+            }
+            
+
+           
         }
     }
 }
