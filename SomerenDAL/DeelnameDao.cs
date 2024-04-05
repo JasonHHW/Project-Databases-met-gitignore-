@@ -10,27 +10,35 @@ namespace SomerenDAL
 {
     public class DeelnameDao : BaseDao
     {
-        public List<Deelname> GetAllDeelnemers()
+        public List<Student> GetAllDeelnemersFromActiviteitId(Activiteit activiteit)
         {
-            string query = "SELECT * FROM [Deelname]";
-            SqlParameter[] sqlParameters = new SqlParameter[0];
+            string query = "SELECT [Voornaam], [Achternaam], [StudentId] FROM [Student] JOIN [Deelname] ON Student.StudentId = Deelname.StudentId WHERE Deelname.ActiviteitId = @ActiviteitId";
+            SqlParameter[] sqlParameters = new SqlParameter[] { new SqlParameter ("@ActiviteitId", activiteit.ActiviteitId) };
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
 
-        public List<Deelname> ReadTables(DataTable dataTable)
+        public List<Student> ReadTables(DataTable dataTable)
         {
-            List<Deelname> deelnemers = new List<Deelname>();
+            List<Student> deelnemers = new List<Student>();
 
             foreach (DataRow dr in dataTable.Rows)
             {
-                Deelname deelnemer = new Deelname()
+                Student deelnemer = new Student()
                 {
-                    ActiviteitId = (int)dr["ActiviteitId"],
-                    Deelnemer = (int)dr["Deelnemer"]
+                    Voornaam = (string)dr["Voornaam"],
+                    Achternaam = (string)dr["Deelnemer"],
+                    StudentId = (int)dr["StudentId"]
                 };
                 deelnemers.Add(deelnemer);
             }
             return deelnemers;
+        }
+
+        public List<Student> GetNonParticipatingStudents(Activiteit act)
+        {
+            string query = "SELECT [Student.Voornaam], [Student.Achternaam], [Student.StudentId] FROM [Student] WHERE StudentId NOT IN(SELECT [StudentId] FROM [Deelname] WHERE ActiviteitId = @ActiviteitId)";
+            SqlParameter[] sqlParameters = new SqlParameter[] { new SqlParameter ("@ActiviteitId", act.ActiviteitId) };
+            return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
     }
 }
