@@ -62,47 +62,55 @@ namespace SomerenDAL
             {
                 OrderItem orderItem = new OrderItem()
                 {
-                    ItemId = (int)dr["ItemId"],
-                    BestellingId = (int)dr["BestellingId"],
-                    DrankNaam = dr["DrankNaam"].ToString(),
-                    Aantal = (int)dr["Aantal"]
+                    ItemId = (int)dr["itemId"],
+                    BestellingId = (int)dr["orderId"],
+                    DrankNaam = dr["drinkName"].ToString(),
+                    Aantal = (int)dr["quantity"],
+                    Prijs = (decimal)dr["price"]
                 };
                 orderItems.Add(orderItem);
             }
             return orderItems;
         }
 
-        public int ReadTotalDrinks(DataTable dataTable)
+        public List<OrderItem> RRReadTables(DataTable dataTable) // RR stands for RevenueReport
         {
-            int totalDrinks = 0;
+            List<OrderItem> orderItems = new List<OrderItem>();
+
             foreach (DataRow dr in dataTable.Rows)
             {
-                if (dr["Aantal"] != DBNull.Value)
+                OrderItem orderItem = new OrderItem()
                 {
-                    totalDrinks += Convert.ToInt32(dr["Aantal"]);
-                }
+                    ItemId = (int)dr["itemId"],
+                    DrankNaam = dr["drinkName"].ToString(),
+                    Aantal = (int)dr["quantity"],
+                    Prijs = (decimal)dr["price"]
+                };
+                orderItems.Add(orderItem);
             }
-            return totalDrinks;
+            return orderItems;
         }
+
         public int ReadTablesforint(DataTable dataTable)
         {
             
                 DataRow dr = dataTable.Rows[0];
 
-                return (int)dr["BestellingID"];
+                return (int)dr["orderID"];
                   
          
         }
 
-        public int CountOrderItemsByOrderDate(DateTime start, DateTime end)
+        public List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)
         {
-            string query = "SELECT SUM([Aantal]) AS [Aantal] FROM [OrderItem] JOIN [Bestelling] ON Bestelling.BestellingId = OrderItem.BestellingId WHERE [BestelDatum] BETWEEN @start AND @eind";
+            // query selects the total and price for each drink and groups it by the name of the drink
+            string query = "SELECT SUM([quantity]) AS [quantity], [itemId], [Drink].[price] AS [price], OrderItem.[drinkName] FROM [OrderItem] JOIN [Ordering] ON Ordering.orderId = OrderItem.orderId JOIN [Drink] ON OrderItem.drinkName = Drink.drinkName WHERE [orderDate] BETWEEN @start AND @eind GROUP BY OrderItem.drinkName, Drink.price, quantity, OrderItem.itemId";
             SqlParameter[] sqlParameters = new SqlParameter[2];
             sqlParameters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParameters[1] = new SqlParameter("@eind", SqlDbType.DateTime);
             sqlParameters[0].Value = start.Date;
             sqlParameters[1].Value = end.Date.AddDays(1);
-            return ReadTotalDrinks(ExecuteSelectQuery(query, sqlParameters));
+           return RRReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
 
         

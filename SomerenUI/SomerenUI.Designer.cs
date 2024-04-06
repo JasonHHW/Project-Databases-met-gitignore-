@@ -57,6 +57,17 @@
             dtpDrankOmzetStart = new System.Windows.Forms.DateTimePicker();
             pictureBox7 = new System.Windows.Forms.PictureBox();
             lblDrankOmzet = new System.Windows.Forms.Label();
+            pnlManageActivityParticipants = new System.Windows.Forms.Panel();
+            bttnAddParticipatingStudent = new System.Windows.Forms.Button();
+            bttnRemoveParticipatingStudent = new System.Windows.Forms.Button();
+            lblMAPActivities = new System.Windows.Forms.Label();
+            lblMAPNonParticipatingStudents = new System.Windows.Forms.Label();
+            lblMAPParticipatingStudents = new System.Windows.Forms.Label();
+            listViewMAPNonParticipatingStudents = new System.Windows.Forms.ListView();
+            listViewMAPParticipatingStudents = new System.Windows.Forms.ListView();
+            listViewMAPActivities = new System.Windows.Forms.ListView();
+            pictureBox11 = new System.Windows.Forms.PictureBox();
+            lblManageActivityParticipants = new System.Windows.Forms.Label();
             pnlStudents = new System.Windows.Forms.Panel();
             studentKamerComboBox = new System.Windows.Forms.ComboBox();
             StudentKlasInput = new System.Windows.Forms.TextBox();
@@ -150,21 +161,12 @@
             pictureBox2 = new System.Windows.Forms.PictureBox();
             KamersLabel = new System.Windows.Forms.Label();
             lblDashboard = new System.Windows.Forms.Label();
-            pnlManageActivityParticipants = new System.Windows.Forms.Panel();
-            bttnAddParticipatingStudent = new System.Windows.Forms.Button();
-            bttnRemoveParticipatingStudent = new System.Windows.Forms.Button();
-            lblMAPActivities = new System.Windows.Forms.Label();
-            lblMAPNonParticipatingStudents = new System.Windows.Forms.Label();
-            lblMAPParticipatingStudents = new System.Windows.Forms.Label();
-            listViewMAPNonParticipatingStudents = new System.Windows.Forms.ListView();
-            listViewMAPParticipatingStudents = new System.Windows.Forms.ListView();
-            listViewMAPActivities = new System.Windows.Forms.ListView();
-            pictureBox11 = new System.Windows.Forms.PictureBox();
-            lblManageActivityParticipants = new System.Windows.Forms.Label();
             menuStrip1.SuspendLayout();
             pnlDashboard.SuspendLayout();
             pnlDrankOmzet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox7).BeginInit();
+            pnlManageActivityParticipants.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
             pnlStudents.SuspendLayout();
             pnlDrankVoorraad.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
@@ -180,8 +182,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             pnlKamers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            pnlManageActivityParticipants.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox11).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -302,6 +302,7 @@
             // pnlDashboard
             // 
             pnlDashboard.Controls.Add(pnlDrankOmzet);
+            pnlDashboard.Controls.Add(pnlManageActivityParticipants);
             pnlDashboard.Controls.Add(pnlStudents);
             pnlDashboard.Controls.Add(pnlDrankVoorraad);
             pnlDashboard.Controls.Add(pnlManageActivitySupervisors);
@@ -325,10 +326,10 @@
             pnlDrankOmzet.Controls.Add(dtpDrankOmzetStart);
             pnlDrankOmzet.Controls.Add(pictureBox7);
             pnlDrankOmzet.Controls.Add(lblDrankOmzet);
-            pnlDrankOmzet.Location = new System.Drawing.Point(816, 188);
+            pnlDrankOmzet.Location = new System.Drawing.Point(244, 166);
             pnlDrankOmzet.Margin = new System.Windows.Forms.Padding(2);
             pnlDrankOmzet.Name = "pnlDrankOmzet";
-            pnlDrankOmzet.Size = new System.Drawing.Size(105, 52);
+            pnlDrankOmzet.Size = new System.Drawing.Size(100, 54);
             pnlDrankOmzet.TabIndex = 7;
             pnlDrankOmzet.Visible = false;
             // 
@@ -413,6 +414,115 @@
             lblDrankOmzet.Size = new System.Drawing.Size(85, 32);
             lblDrankOmzet.TabIndex = 0;
             lblDrankOmzet.Text = "Omzet";
+            // 
+            // pnlManageActivityParticipants
+            // 
+            pnlManageActivityParticipants.Controls.Add(bttnAddParticipatingStudent);
+            pnlManageActivityParticipants.Controls.Add(bttnRemoveParticipatingStudent);
+            pnlManageActivityParticipants.Controls.Add(lblMAPActivities);
+            pnlManageActivityParticipants.Controls.Add(lblMAPNonParticipatingStudents);
+            pnlManageActivityParticipants.Controls.Add(lblMAPParticipatingStudents);
+            pnlManageActivityParticipants.Controls.Add(listViewMAPNonParticipatingStudents);
+            pnlManageActivityParticipants.Controls.Add(listViewMAPParticipatingStudents);
+            pnlManageActivityParticipants.Controls.Add(listViewMAPActivities);
+            pnlManageActivityParticipants.Controls.Add(pictureBox11);
+            pnlManageActivityParticipants.Controls.Add(lblManageActivityParticipants);
+            pnlManageActivityParticipants.Location = new System.Drawing.Point(383, 305);
+            pnlManageActivityParticipants.Name = "pnlManageActivityParticipants";
+            pnlManageActivityParticipants.Size = new System.Drawing.Size(166, 55);
+            pnlManageActivityParticipants.TabIndex = 11;
+            pnlManageActivityParticipants.Visible = false;
+            // 
+            // bttnAddParticipatingStudent
+            // 
+            bttnAddParticipatingStudent.Location = new System.Drawing.Point(412, 213);
+            bttnAddParticipatingStudent.Name = "bttnAddParticipatingStudent";
+            bttnAddParticipatingStudent.Size = new System.Drawing.Size(173, 44);
+            bttnAddParticipatingStudent.TabIndex = 10;
+            bttnAddParticipatingStudent.Text = "Add student to activity";
+            bttnAddParticipatingStudent.UseVisualStyleBackColor = true;
+            bttnAddParticipatingStudent.Click += MAPAddStudent;
+            // 
+            // bttnRemoveParticipatingStudent
+            // 
+            bttnRemoveParticipatingStudent.Location = new System.Drawing.Point(68, 213);
+            bttnRemoveParticipatingStudent.Name = "bttnRemoveParticipatingStudent";
+            bttnRemoveParticipatingStudent.Size = new System.Drawing.Size(173, 44);
+            bttnRemoveParticipatingStudent.TabIndex = 9;
+            bttnRemoveParticipatingStudent.Text = "Remove student from activity";
+            bttnRemoveParticipatingStudent.UseVisualStyleBackColor = true;
+            bttnRemoveParticipatingStudent.Click += MAPRemoveStudent;
+            // 
+            // lblMAPActivities
+            // 
+            lblMAPActivities.AutoSize = true;
+            lblMAPActivities.Location = new System.Drawing.Point(288, 269);
+            lblMAPActivities.Name = "lblMAPActivities";
+            lblMAPActivities.Size = new System.Drawing.Size(81, 15);
+            lblMAPActivities.TabIndex = 8;
+            lblMAPActivities.Text = "Select Activity";
+            // 
+            // lblMAPNonParticipatingStudents
+            // 
+            lblMAPNonParticipatingStudents.AutoSize = true;
+            lblMAPNonParticipatingStudents.Location = new System.Drawing.Point(423, 82);
+            lblMAPNonParticipatingStudents.Name = "lblMAPNonParticipatingStudents";
+            lblMAPNonParticipatingStudents.Size = new System.Drawing.Size(149, 15);
+            lblMAPNonParticipatingStudents.TabIndex = 7;
+            lblMAPNonParticipatingStudents.Text = "Non Participating Students";
+            // 
+            // lblMAPParticipatingStudents
+            // 
+            lblMAPParticipatingStudents.AutoSize = true;
+            lblMAPParticipatingStudents.Location = new System.Drawing.Point(86, 80);
+            lblMAPParticipatingStudents.Name = "lblMAPParticipatingStudents";
+            lblMAPParticipatingStudents.Size = new System.Drawing.Size(123, 15);
+            lblMAPParticipatingStudents.TabIndex = 6;
+            lblMAPParticipatingStudents.Text = "Participating Students";
+            // 
+            // listViewMAPNonParticipatingStudents
+            // 
+            listViewMAPNonParticipatingStudents.Location = new System.Drawing.Point(369, 103);
+            listViewMAPNonParticipatingStudents.Name = "listViewMAPNonParticipatingStudents";
+            listViewMAPNonParticipatingStudents.Size = new System.Drawing.Size(250, 104);
+            listViewMAPNonParticipatingStudents.TabIndex = 5;
+            listViewMAPNonParticipatingStudents.UseCompatibleStateImageBehavior = false;
+            // 
+            // listViewMAPParticipatingStudents
+            // 
+            listViewMAPParticipatingStudents.Location = new System.Drawing.Point(26, 103);
+            listViewMAPParticipatingStudents.Name = "listViewMAPParticipatingStudents";
+            listViewMAPParticipatingStudents.Size = new System.Drawing.Size(250, 104);
+            listViewMAPParticipatingStudents.TabIndex = 4;
+            listViewMAPParticipatingStudents.UseCompatibleStateImageBehavior = false;
+            // 
+            // listViewMAPActivities
+            // 
+            listViewMAPActivities.Location = new System.Drawing.Point(199, 297);
+            listViewMAPActivities.Name = "listViewMAPActivities";
+            listViewMAPActivities.Size = new System.Drawing.Size(250, 104);
+            listViewMAPActivities.TabIndex = 3;
+            listViewMAPActivities.UseCompatibleStateImageBehavior = false;
+            listViewMAPActivities.SelectedIndexChanged += MAPActivitySelected;
+            // 
+            // pictureBox11
+            // 
+            pictureBox11.Image = (System.Drawing.Image)resources.GetObject("pictureBox11.Image");
+            pictureBox11.Location = new System.Drawing.Point(805, 0);
+            pictureBox11.Name = "pictureBox11";
+            pictureBox11.Size = new System.Drawing.Size(130, 123);
+            pictureBox11.TabIndex = 2;
+            pictureBox11.TabStop = false;
+            // 
+            // lblManageActivityParticipants
+            // 
+            lblManageActivityParticipants.AutoSize = true;
+            lblManageActivityParticipants.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            lblManageActivityParticipants.Location = new System.Drawing.Point(13, 7);
+            lblManageActivityParticipants.Name = "lblManageActivityParticipants";
+            lblManageActivityParticipants.Size = new System.Drawing.Size(314, 32);
+            lblManageActivityParticipants.TabIndex = 0;
+            lblManageActivityParticipants.Text = "Manage Activity Participants";
             // 
             // pnlStudents
             // 
@@ -1237,121 +1347,11 @@
             lblDashboard.TabIndex = 0;
             lblDashboard.Text = "Welcome to the Someren Application!";
             // 
-            // pnlManageActivityParticipants
-            // 
-            pnlManageActivityParticipants.Controls.Add(bttnAddParticipatingStudent);
-            pnlManageActivityParticipants.Controls.Add(bttnRemoveParticipatingStudent);
-            pnlManageActivityParticipants.Controls.Add(lblMAPActivities);
-            pnlManageActivityParticipants.Controls.Add(lblMAPNonParticipatingStudents);
-            pnlManageActivityParticipants.Controls.Add(lblMAPParticipatingStudents);
-            pnlManageActivityParticipants.Controls.Add(listViewMAPNonParticipatingStudents);
-            pnlManageActivityParticipants.Controls.Add(listViewMAPParticipatingStudents);
-            pnlManageActivityParticipants.Controls.Add(listViewMAPActivities);
-            pnlManageActivityParticipants.Controls.Add(pictureBox11);
-            pnlManageActivityParticipants.Controls.Add(lblManageActivityParticipants);
-            pnlManageActivityParticipants.Location = new System.Drawing.Point(12, 27);
-            pnlManageActivityParticipants.Name = "pnlManageActivityParticipants";
-            pnlManageActivityParticipants.Size = new System.Drawing.Size(939, 470);
-            pnlManageActivityParticipants.TabIndex = 11;
-            pnlManageActivityParticipants.Visible = false;
-            // 
-            // bttnAddParticipatingStudent
-            // 
-            bttnAddParticipatingStudent.Location = new System.Drawing.Point(412, 213);
-            bttnAddParticipatingStudent.Name = "bttnAddParticipatingStudent";
-            bttnAddParticipatingStudent.Size = new System.Drawing.Size(173, 44);
-            bttnAddParticipatingStudent.TabIndex = 10;
-            bttnAddParticipatingStudent.Text = "Add student to activity";
-            bttnAddParticipatingStudent.UseVisualStyleBackColor = true;
-            bttnAddParticipatingStudent.Click += MAPAddStudent;
-            // 
-            // bttnRemoveParticipatingStudent
-            // 
-            bttnRemoveParticipatingStudent.Location = new System.Drawing.Point(68, 213);
-            bttnRemoveParticipatingStudent.Name = "bttnRemoveParticipatingStudent";
-            bttnRemoveParticipatingStudent.Size = new System.Drawing.Size(173, 44);
-            bttnRemoveParticipatingStudent.TabIndex = 9;
-            bttnRemoveParticipatingStudent.Text = "Remove student from activity";
-            bttnRemoveParticipatingStudent.UseVisualStyleBackColor = true;
-            bttnRemoveParticipatingStudent.Click += MAPRemoveStudent;
-            // 
-            // lblMAPActivities
-            // 
-            lblMAPActivities.AutoSize = true;
-            lblMAPActivities.Location = new System.Drawing.Point(288, 269);
-            lblMAPActivities.Name = "lblMAPActivities";
-            lblMAPActivities.Size = new System.Drawing.Size(81, 15);
-            lblMAPActivities.TabIndex = 8;
-            lblMAPActivities.Text = "Select Activity";
-            // 
-            // lblMAPNonParticipatingStudents
-            // 
-            lblMAPNonParticipatingStudents.AutoSize = true;
-            lblMAPNonParticipatingStudents.Location = new System.Drawing.Point(423, 82);
-            lblMAPNonParticipatingStudents.Name = "lblMAPNonParticipatingStudents";
-            lblMAPNonParticipatingStudents.Size = new System.Drawing.Size(149, 15);
-            lblMAPNonParticipatingStudents.TabIndex = 7;
-            lblMAPNonParticipatingStudents.Text = "Non Participating Students";
-            // 
-            // lblMAPParticipatingStudents
-            // 
-            lblMAPParticipatingStudents.AutoSize = true;
-            lblMAPParticipatingStudents.Location = new System.Drawing.Point(86, 80);
-            lblMAPParticipatingStudents.Name = "lblMAPParticipatingStudents";
-            lblMAPParticipatingStudents.Size = new System.Drawing.Size(123, 15);
-            lblMAPParticipatingStudents.TabIndex = 6;
-            lblMAPParticipatingStudents.Text = "Participating Students";
-            // 
-            // listViewMAPNonParticipatingStudents
-            // 
-            listViewMAPNonParticipatingStudents.Location = new System.Drawing.Point(369, 103);
-            listViewMAPNonParticipatingStudents.Name = "listViewMAPNonParticipatingStudents";
-            listViewMAPNonParticipatingStudents.Size = new System.Drawing.Size(250, 104);
-            listViewMAPNonParticipatingStudents.TabIndex = 5;
-            listViewMAPNonParticipatingStudents.UseCompatibleStateImageBehavior = false;
-            // 
-            // listViewMAPParticipatingStudents
-            // 
-            listViewMAPParticipatingStudents.Location = new System.Drawing.Point(26, 103);
-            listViewMAPParticipatingStudents.Name = "listViewMAPParticipatingStudents";
-            listViewMAPParticipatingStudents.Size = new System.Drawing.Size(250, 104);
-            listViewMAPParticipatingStudents.TabIndex = 4;
-            listViewMAPParticipatingStudents.UseCompatibleStateImageBehavior = false;
-            // 
-            // listViewMAPActivities
-            // 
-            listViewMAPActivities.Location = new System.Drawing.Point(199, 297);
-            listViewMAPActivities.Name = "listViewMAPActivities";
-            listViewMAPActivities.Size = new System.Drawing.Size(250, 104);
-            listViewMAPActivities.TabIndex = 3;
-            listViewMAPActivities.UseCompatibleStateImageBehavior = false;
-            listViewMAPActivities.SelectedIndexChanged += MAPActivitySelected;
-            // 
-            // pictureBox11
-            // 
-            pictureBox11.Image = (System.Drawing.Image)resources.GetObject("pictureBox11.Image");
-            pictureBox11.Location = new System.Drawing.Point(805, 0);
-            pictureBox11.Name = "pictureBox11";
-            pictureBox11.Size = new System.Drawing.Size(130, 123);
-            pictureBox11.TabIndex = 2;
-            pictureBox11.TabStop = false;
-            // 
-            // lblManageActivityParticipants
-            // 
-            lblManageActivityParticipants.AutoSize = true;
-            lblManageActivityParticipants.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            lblManageActivityParticipants.Location = new System.Drawing.Point(13, 7);
-            lblManageActivityParticipants.Name = "lblManageActivityParticipants";
-            lblManageActivityParticipants.Size = new System.Drawing.Size(314, 32);
-            lblManageActivityParticipants.TabIndex = 0;
-            lblManageActivityParticipants.Text = "Manage Activity Participants";
-            // 
             // SomerenUI
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(962, 505);
-            Controls.Add(pnlManageActivityParticipants);
             Controls.Add(menuStrip1);
             Controls.Add(pnlDashboard);
             MainMenuStrip = menuStrip1;
@@ -1364,6 +1364,9 @@
             pnlDrankOmzet.ResumeLayout(false);
             pnlDrankOmzet.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
+            pnlManageActivityParticipants.ResumeLayout(false);
+            pnlManageActivityParticipants.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
             pnlStudents.ResumeLayout(false);
             pnlStudents.PerformLayout();
             pnlDrankVoorraad.ResumeLayout(false);
@@ -1387,9 +1390,6 @@
             pnlKamers.ResumeLayout(false);
             pnlKamers.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            pnlManageActivityParticipants.ResumeLayout(false);
-            pnlManageActivityParticipants.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox11).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

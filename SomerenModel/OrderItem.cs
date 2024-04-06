@@ -13,6 +13,8 @@ namespace SomerenModel
         public string DrankNaam { get; set; }
         public int Aantal {  get; set; }
 
+        public decimal Prijs { get; set; }
+
         public override string ToString()
         {
             return ($"itemid:{ItemId}, bestellingsid:{BestellingId}, dranknaam: {DrankNaam}, aantal: {Aantal}");

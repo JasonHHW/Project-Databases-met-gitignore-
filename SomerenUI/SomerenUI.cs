@@ -411,14 +411,14 @@ namespace SomerenUI
         }
         private void DisplayStudentsMAP(Activiteit activiteit)
         {
-            DeelnameService deelnameService = new DeelnameService();
+            DeelnameService deelnameService = new DeelnameService(); // gets all the participating and non participating students from the database
             List<Student> participants = deelnameService.GetDeelnemersFromActiviteitId(activiteit);
             List<Student> nonParticipants = deelnameService.GetNietDeelnemers(activiteit);
 
             listViewMAPParticipatingStudents.Clear();
             listViewMAPNonParticipatingStudents.Clear();
 
-            foreach (Student student in participants)
+            foreach (Student student in participants) // each foreach fills the participants and non participants listview respectively
             {
                 ListViewItem li = new ListViewItem(student.Naam);
                 li.SubItems.Add(student.StudentId.ToString());
@@ -468,13 +468,18 @@ namespace SomerenUI
             DeelnameService deelnameService = new DeelnameService();
             if (listViewMAPParticipatingStudents.SelectedItems.Count > 0)
             {
-                deelnameService.RemoveParticipatingStudent((Activiteit)listViewMAPActivities.SelectedItems[0].Tag, (Student)listViewMAPParticipatingStudents.SelectedItems[0].Tag);
-                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
-            } else
+                var ConfirmRemoveStudents = MessageBox.Show("Are you sure you want to delete the student from this activity?", "Remove student from activity", MessageBoxButtons.YesNo);
+                if (ConfirmRemoveStudents == DialogResult.Yes)
+                {
+                    deelnameService.RemoveParticipatingStudent((Activiteit)listViewMAPActivities.SelectedItems[0].Tag, (Student)listViewMAPParticipatingStudents.SelectedItems[0].Tag);
+                    DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+                }
+            }
+            else
             {
                 MessageBox.Show("Please select a student before proceeding");
             }
-            
+
         }
 
         private void MAPAddStudent(object sender, EventArgs e)
@@ -538,6 +543,7 @@ namespace SomerenUI
             ShowKamersPanel();
         }
 
+
         //Drank
         private List<Drank> GetDrankjes()
         {
@@ -565,6 +571,7 @@ namespace SomerenUI
         {
 
         }
+
 
         //Voorraad
         private void ShowDrankVoorraadPanel()
@@ -659,6 +666,7 @@ namespace SomerenUI
                 PrijsInput.Text = prijs.ToString();
             }
         }
+
 
         //DrankVoorraad CRUD
         private void AddDrankButton_Click(object sender, EventArgs e)
@@ -982,23 +990,18 @@ namespace SomerenUI
         {
             Methodes.ShowPanel(pnlDrankOmzet);
         }
-        private int GetOmzetTotalDrankjes()
-        {
-            OrderItemService orderItemService = new OrderItemService();
-            return orderItemService.CountOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
-        }
         public int GetAmountOfStudentsWithOrders()
         {
             BestellingService bestellingService = new BestellingService();
-            return bestellingService.GetAmountOfStudentsOmzet(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value).Count;
+            return bestellingService.GetAmountOfStudentsOmzet(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
         }
         private void DisplayOmzet()
         {
             listViewDrankOmzet.Items.Clear();
             int studentsOrdered = GetAmountOfStudentsWithOrders();
-            double price = 2.00;
-            int totalDrinksSold = GetOmzetTotalDrankjes();
-            double turnover = totalDrinksSold * price;
+            OrderItemService orderItemService = new OrderItemService();
+            int totalDrinksSold = orderItemService.RRGetTotalDrinksSold(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
+            decimal turnover = orderItemService.RRGetTurnover(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
             ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
             li.SubItems.Add(turnover.ToString("C", new CultureInfo("nl-NL")));
             li.SubItems.Add(Convert.ToString(studentsOrdered));
