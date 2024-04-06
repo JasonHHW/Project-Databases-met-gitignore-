@@ -12,7 +12,7 @@ namespace SomerenDAL
     {
         public List<Activiteit> GetAllActiviteiten()
         {
-            string query = "SELECT * FROM [Activiteit]";
+            string query = "SELECT * FROM [Activity]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
@@ -25,10 +25,10 @@ namespace SomerenDAL
             {
                 Activiteit activiteit = new Activiteit()
                 {
-                    ActiviteitId = (int)dr["ActiviteitId"],
-                    ActiviteitNaam = dr["ActiviteitNaam"].ToString(),
-                    BeginTijd = (DateTime)dr["BeginTijd"],
-                    EindTijd = (DateTime)dr["EindTijd"]
+                    ActiviteitId = (int)dr["ActivityId"],
+                    ActiviteitNaam = dr["ActivityName"].ToString(),
+                    BeginTijd = (DateTime)dr["StartTime"],
+                    EindTijd = (DateTime)dr["EndTime"]
                 };
                 activiteiten.Add(activiteit);
             }

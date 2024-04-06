@@ -12,7 +12,7 @@ namespace SomerenDAL
     {
         public List<Student> GetAllDeelnemersFromActiviteitId(Activiteit activiteit)
         {
-            string query = "SELECT [Voornaam], [Achternaam], [StudentId] FROM [Student] JOIN [Deelname] ON Student.StudentId = Deelname.StudentId WHERE Deelname.ActiviteitId = @ActiviteitId";
+            string query = "SELECT [firstName], [lastName], [studentId] FROM [student] JOIN [Participation] ON Student.studentId = Participation.participant WHERE Participation.ActivityId = @ActiviteitId";
             SqlParameter[] sqlParameters = new SqlParameter[] { new SqlParameter ("@ActiviteitId", activiteit.ActiviteitId) };
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
@@ -25,9 +25,9 @@ namespace SomerenDAL
             {
                 Student deelnemer = new Student()
                 {
-                    Voornaam = (string)dr["Voornaam"],
-                    Achternaam = (string)dr["Deelnemer"],
-                    StudentId = (int)dr["StudentId"]
+                    Voornaam = (string)dr["firstName"],
+                    Achternaam = (string)dr["lastName"],
+                    StudentId = (int)dr["studentId"]
                 };
                 deelnemers.Add(deelnemer);
             }
@@ -36,7 +36,7 @@ namespace SomerenDAL
 
         public List<Student> GetNonParticipatingStudents(Activiteit act)
         {
-            string query = "SELECT [Student.Voornaam], [Student.Achternaam], [Student.StudentId] FROM [Student] WHERE StudentId NOT IN(SELECT [StudentId] FROM [Deelname] WHERE ActiviteitId = @ActiviteitId)";
+            string query = "SELECT [firstName], [lastName], [studentId] FROM [student] WHERE [studentId] NOT IN(SELECT [participant] FROM [Participation] WHERE ActivityId = @ActiviteitId)";
             SqlParameter[] sqlParameters = new SqlParameter[] { new SqlParameter ("@ActiviteitId", act.ActiviteitId) };
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }

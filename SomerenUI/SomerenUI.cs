@@ -1069,7 +1069,10 @@ namespace SomerenUI
 
         private void MAPActivitySelected(object sender, EventArgs e)
         {
-            DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            if (listViewMAPActivities.SelectedItems.Count > 0)
+            {
+                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            }
         }
     }
 }
