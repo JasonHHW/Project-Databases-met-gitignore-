@@ -112,7 +112,7 @@ namespace SomerenUI
                 StudentAchternaamInput.Text = studentAchternaam;
                 StudentTelefoonnummerInput.Text = studentTelefoonnummer;
                 StudentKlasInput.Text = studentKlas;
-                
+
                 //Selects Student Kamer in ComboBox
                 int index = studentKamerComboBox.FindStringExact(studentKamer);
                 if (index != -1)
@@ -412,20 +412,20 @@ namespace SomerenUI
         private void DisplayStudentsMAP(Activiteit activiteit)
         {
             DeelnameService deelnameService = new DeelnameService();
-            List<Student> deelnemers = deelnameService.GetDeelnemersFromActiviteitId(activiteit);
-            List<Student> nietDeelnemers = deelnameService.GetNietDeelnemers(activiteit);
+            List<Student> participants = deelnameService.GetDeelnemersFromActiviteitId(activiteit);
+            List<Student> nonParticipants = deelnameService.GetNietDeelnemers(activiteit);
 
             listViewMAPParticipatingStudents.Clear();
             listViewMAPNonParticipatingStudents.Clear();
 
-            foreach (Student student in deelnemers)
+            foreach (Student student in participants)
             {
                 ListViewItem li = new ListViewItem(student.Naam);
                 li.SubItems.Add(student.StudentId.ToString());
                 li.Tag = student;
                 listViewMAPParticipatingStudents.Items.Add(li);
             }
-            foreach (Student student in nietDeelnemers)
+            foreach (Student student in nonParticipants)
             {
                 ListViewItem li = new ListViewItem(student.Naam);
                 li.SubItems.Add(student.StudentId.ToString());
@@ -436,7 +436,7 @@ namespace SomerenUI
         private void DisplayActiviteitenMAP(List<Activiteit> activiteiten)
         {
             // clear the listview before filling it
-            listViewActiviteiten.Items.Clear();
+            listViewMAPActivities.Items.Clear();
 
             foreach (Activiteit activiteit in activiteiten)
             {
@@ -457,7 +457,38 @@ namespace SomerenUI
         }
         private void MAPActivitySelected(object sender, EventArgs e)
         {
-            DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            if (listViewMAPActivities.SelectedItems.Count! > 0)
+            {
+                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            }
+        }
+
+        private void MAPRemoveStudent(object sender, EventArgs e)
+        {
+            DeelnameService deelnameService = new DeelnameService();
+            if (listViewMAPParticipatingStudents.SelectedItems.Count > 0)
+            {
+                deelnameService.RemoveParticipatingStudent((Activiteit)listViewMAPActivities.SelectedItems[0].Tag, (Student)listViewMAPParticipatingStudents.SelectedItems[0].Tag);
+                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            } else
+            {
+                MessageBox.Show("Please select a student before proceeding");
+            }
+            
+        }
+
+        private void MAPAddStudent(object sender, EventArgs e)
+        {
+            DeelnameService deelnameService = new DeelnameService();
+            if (listViewMAPNonParticipatingStudents.SelectedItems.Count > 0)
+            {
+                deelnameService.AddParticipatingStudent((Activiteit)listViewMAPActivities.SelectedItems[0].Tag, (Student)listViewMAPNonParticipatingStudents.SelectedItems[0].Tag);
+                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
+            }
+            else
+            {
+                MessageBox.Show("Please select a student before proceeding");
+            }
         }
 
         //Kamers
@@ -1057,132 +1088,6 @@ namespace SomerenUI
             }
             return erisgenoeg;
         }
-        private void FillStudentKamerComboBox()
-        {
-            // Instantiate StudentDao
-            StudentDao studentDao = new StudentDao();
 
-            try
-            {
-                // Get all student rooms from the database
-                List<string> studentRooms = studentDao.GetStudentRooms();
-
-                // Clear existing items in the ComboBox
-                studentKamerComboBox.Items.Clear();
-
-                // Add retrieved student rooms to the ComboBox
-                foreach (string room in studentRooms)
-                {
-                    studentKamerComboBox.Items.Add(room);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions
-                MessageBox.Show("An error occurred while fetching student rooms: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void EditStudentButton_Click(object sender, EventArgs e)
-        {
-            if (listViewStudenten.SelectedItems.Count > 0)
-            {
-                // Get the selected item
-                ListViewItem selectedStudent = listViewStudenten.SelectedItems[0];
-
-                // Get the old data from the selected item
-                int studentId = int.Parse(selectedStudent.Text);
-                string studentNaam = selectedStudent.SubItems[1].Text;
-                string studentTelefoonnummer = selectedStudent.SubItems[2].Text;
-                string studentKlas = selectedStudent.SubItems[3].Text;
-                string studentKamer = selectedStudent.SubItems[4].Text;
-
-                // Get new data from textboxes
-                int newStudentId = int.Parse(StudentIdInput.Text);
-                string newStudentVoornaam = StudentVoornaamInput.Text;
-                string newStudentAchternaam = StudentAchternaamInput.Text;
-                string newStudentTelefoonnummer = StudentTelefoonnummerInput.Text;
-                string newStudentKlas = StudentKlasInput.Text;
-                string newStudentKamer = studentKamerComboBox.SelectedItem.ToString();
-
-                // Confirmation message
-                DialogResult result = MessageBox.Show($"Are you sure you want to edit:\n{studentNaam} with Id {studentId} with phonenumber {studentTelefoonnummer} in class {studentKlas} and room {studentKamer}" +
-                                                        $"\nto:\n" +
-                                                        $"{newStudentVoornaam} {newStudentAchternaam} with Id {newStudentId} with phonenumber {newStudentTelefoonnummer} in class {newStudentKlas} and room {newStudentKamer}?",
-                                           "Confirmation",
-                                           MessageBoxButtons.YesNo,
-                                           MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    // Call the DAO method to update the student
-                    StudentDao studentDao = new StudentDao();
-                    try
-                    {
-                        studentDao.UpdateStudent(studentId, newStudentId, newStudentVoornaam, newStudentAchternaam, newStudentTelefoonnummer, newStudentKlas, newStudentKamer);
-
-                        // Display a success message to the user
-                        MessageBox.Show("Student updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Clear input fields
-                        ClearStudentsInputFields();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Handle exceptions appropriately
-                        MessageBox.Show("Error updating Student: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                // Inform the user to select a row in the ListView
-                MessageBox.Show("Please select a student to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            // Optionally, perform any additional actions
-            ShowStudentsPanel();
-        }
-
-        private void DeleteStudentButton_Click(object sender, EventArgs e)
-        {
-            if (listViewStudenten.SelectedItems.Count == 1)
-            {
-                // Vraag om bevestiging
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this student?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    // Verkrijg de geselecteerde studentId
-                    int selectedStudentId = int.Parse(listViewStudenten.SelectedItems[0].Text);
-
-                    StudentDao studentDao = new StudentDao();
-
-                    // Voer de verwijdering uit
-                    studentDao.DeleteStudent(selectedStudentId);
-
-                    // Wis tekstvakken
-                    ClearStudentsInputFields();
-
-                    // Vernieuw de weergegeven dranken
-                    ShowStudentsPanel();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select a student to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void deelnemersBeherenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowDeelnemersBeherenPanel();
-        }
-
-        private void MAPActivitySelected(object sender, EventArgs e)
-        {
-            if (listViewMAPActivities.SelectedItems.Count > 0)
-            {
-                DisplayStudentsMAP((Activiteit)listViewMAPActivities.SelectedItems[0].Tag);
-            }
-        }
     }
 }

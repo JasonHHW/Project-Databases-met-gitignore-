@@ -151,16 +151,16 @@
             KamersLabel = new System.Windows.Forms.Label();
             lblDashboard = new System.Windows.Forms.Label();
             pnlManageActivityParticipants = new System.Windows.Forms.Panel();
+            bttnAddParticipatingStudent = new System.Windows.Forms.Button();
+            bttnRemoveParticipatingStudent = new System.Windows.Forms.Button();
+            lblMAPActivities = new System.Windows.Forms.Label();
+            lblMAPNonParticipatingStudents = new System.Windows.Forms.Label();
             lblMAPParticipatingStudents = new System.Windows.Forms.Label();
             listViewMAPNonParticipatingStudents = new System.Windows.Forms.ListView();
             listViewMAPParticipatingStudents = new System.Windows.Forms.ListView();
             listViewMAPActivities = new System.Windows.Forms.ListView();
             pictureBox11 = new System.Windows.Forms.PictureBox();
             lblManageActivityParticipants = new System.Windows.Forms.Label();
-            lblMAPNonParticipatingStudents = new System.Windows.Forms.Label();
-            lblMAPActivities = new System.Windows.Forms.Label();
-            bttnRemoveParticipatingStudent = new System.Windows.Forms.Button();
-            bttnAddParticipatingStudent = new System.Windows.Forms.Button();
             menuStrip1.SuspendLayout();
             pnlDashboard.SuspendLayout();
             pnlDrankOmzet.SuspendLayout();
@@ -1255,6 +1255,44 @@
             pnlManageActivityParticipants.TabIndex = 11;
             pnlManageActivityParticipants.Visible = false;
             // 
+            // bttnAddParticipatingStudent
+            // 
+            bttnAddParticipatingStudent.Location = new System.Drawing.Point(412, 213);
+            bttnAddParticipatingStudent.Name = "bttnAddParticipatingStudent";
+            bttnAddParticipatingStudent.Size = new System.Drawing.Size(173, 44);
+            bttnAddParticipatingStudent.TabIndex = 10;
+            bttnAddParticipatingStudent.Text = "Add student to activity";
+            bttnAddParticipatingStudent.UseVisualStyleBackColor = true;
+            bttnAddParticipatingStudent.Click += MAPAddStudent;
+            // 
+            // bttnRemoveParticipatingStudent
+            // 
+            bttnRemoveParticipatingStudent.Location = new System.Drawing.Point(68, 213);
+            bttnRemoveParticipatingStudent.Name = "bttnRemoveParticipatingStudent";
+            bttnRemoveParticipatingStudent.Size = new System.Drawing.Size(173, 44);
+            bttnRemoveParticipatingStudent.TabIndex = 9;
+            bttnRemoveParticipatingStudent.Text = "Remove student from activity";
+            bttnRemoveParticipatingStudent.UseVisualStyleBackColor = true;
+            bttnRemoveParticipatingStudent.Click += MAPRemoveStudent;
+            // 
+            // lblMAPActivities
+            // 
+            lblMAPActivities.AutoSize = true;
+            lblMAPActivities.Location = new System.Drawing.Point(288, 269);
+            lblMAPActivities.Name = "lblMAPActivities";
+            lblMAPActivities.Size = new System.Drawing.Size(81, 15);
+            lblMAPActivities.TabIndex = 8;
+            lblMAPActivities.Text = "Select Activity";
+            // 
+            // lblMAPNonParticipatingStudents
+            // 
+            lblMAPNonParticipatingStudents.AutoSize = true;
+            lblMAPNonParticipatingStudents.Location = new System.Drawing.Point(423, 82);
+            lblMAPNonParticipatingStudents.Name = "lblMAPNonParticipatingStudents";
+            lblMAPNonParticipatingStudents.Size = new System.Drawing.Size(149, 15);
+            lblMAPNonParticipatingStudents.TabIndex = 7;
+            lblMAPNonParticipatingStudents.Text = "Non Participating Students";
+            // 
             // lblMAPParticipatingStudents
             // 
             lblMAPParticipatingStudents.AutoSize = true;
@@ -1307,42 +1345,6 @@
             lblManageActivityParticipants.Size = new System.Drawing.Size(314, 32);
             lblManageActivityParticipants.TabIndex = 0;
             lblManageActivityParticipants.Text = "Manage Activity Participants";
-            // 
-            // lblMAPNonParticipatingStudents
-            // 
-            lblMAPNonParticipatingStudents.AutoSize = true;
-            lblMAPNonParticipatingStudents.Location = new System.Drawing.Point(423, 82);
-            lblMAPNonParticipatingStudents.Name = "lblMAPNonParticipatingStudents";
-            lblMAPNonParticipatingStudents.Size = new System.Drawing.Size(149, 15);
-            lblMAPNonParticipatingStudents.TabIndex = 7;
-            lblMAPNonParticipatingStudents.Text = "Non Participating Students";
-            // 
-            // lblMAPActivities
-            // 
-            lblMAPActivities.AutoSize = true;
-            lblMAPActivities.Location = new System.Drawing.Point(288, 269);
-            lblMAPActivities.Name = "lblMAPActivities";
-            lblMAPActivities.Size = new System.Drawing.Size(81, 15);
-            lblMAPActivities.TabIndex = 8;
-            lblMAPActivities.Text = "Select Activity";
-            // 
-            // bttnRemoveParticipatingStudent
-            // 
-            bttnRemoveParticipatingStudent.Location = new System.Drawing.Point(68, 213);
-            bttnRemoveParticipatingStudent.Name = "bttnRemoveParticipatingStudent";
-            bttnRemoveParticipatingStudent.Size = new System.Drawing.Size(173, 44);
-            bttnRemoveParticipatingStudent.TabIndex = 9;
-            bttnRemoveParticipatingStudent.Text = "Remove student from activity";
-            bttnRemoveParticipatingStudent.UseVisualStyleBackColor = true;
-            // 
-            // bttnAddParticipatingStudent
-            // 
-            bttnAddParticipatingStudent.Location = new System.Drawing.Point(412, 213);
-            bttnAddParticipatingStudent.Name = "bttnAddParticipatingStudent";
-            bttnAddParticipatingStudent.Size = new System.Drawing.Size(173, 44);
-            bttnAddParticipatingStudent.TabIndex = 10;
-            bttnAddParticipatingStudent.Text = "Add student to activity";
-            bttnAddParticipatingStudent.UseVisualStyleBackColor = true;
             // 
             // SomerenUI
             // 
