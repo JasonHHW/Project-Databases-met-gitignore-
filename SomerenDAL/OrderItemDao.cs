@@ -47,7 +47,7 @@ namespace SomerenDAL
 
         public int GetMaxOrderId()
         {
-            string query = "SELECT MAX(orderId) AS [prderId] FROM [Ordering]";
+            string query = "SELECT MAX(orderId) AS [orderId] FROM [Ordering]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTablesforint(ExecuteSelectQuery(query, sqlParameters));
 

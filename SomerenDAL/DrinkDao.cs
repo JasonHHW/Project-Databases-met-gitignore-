@@ -84,7 +84,7 @@ namespace SomerenDAL
                 }
 
                 // Update the drink
-                string updateQuery = "UPDATE Drink SET drinkName = @NewDrankNaam, isAlcoholic = @IsAlcoholic, price = @Price WHERE drinkName = @OldDrinkName;" +
+                string updateQuery = "UPDATE Drink SET drinkName = @NewDrinkName, isAlcoholic = @IsAlcoholic, price = @Price WHERE drinkName = @OldDrinkName;" +
                                      "UPDATE Stock SET drinkName = @NewDrinkName, stockAmount = @Stock WHERE drinkname = @OldDrinkName";
 
                 // Define parameters for the query
