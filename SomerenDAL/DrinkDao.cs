@@ -13,7 +13,7 @@ namespace SomerenDAL
     {
         public List<Drink> GetAllDrinks()
         {
-            string query = "SELECT d.drinkName, d.isAlcoholic, s.stockAmount, COALESCE(SUM(oi.Quantity), 0) AS TotalConsumed, d.price " +
+            string query = "SELECT d.drinkName, d.isAlcoholic, s.stockAmount, COALESCE(SUM(oi.quantity), 0) AS TotalConsumed, d.price " +
                             "FROM Drink d " +
                             "JOIN Stock s ON d.drinkName = s.drinkName " +
                             "LEFT JOIN OrderItem oi ON d.drinkName = oi.drinkName " +
