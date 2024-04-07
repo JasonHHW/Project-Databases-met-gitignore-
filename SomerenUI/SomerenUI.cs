@@ -517,123 +517,6 @@ namespace SomerenUI
 
         }
 
-        private void ShowDrankBestellingenPanel()
-        {
-            Methodes.ShowPanel(pnlDrankBestellingen);
-            try
-            {
-                List<Drank> drankjes = Methodes.GetDrankjes();
-                List<Student> students = Methodes.GetStudents();
-
-                DisplayDrankjes(drankjes);
-                Methodes.DisplayStudents(students, listViewBestellingenStudenten);
-                listViewTotaalBesteld.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Something went wrong while loading the students and drinks: " + e.Message);
-            }
-        }
-
-        private void ShowTeachersPanel()
-        {
-            Methodes.ShowPanel(pnlDocenten);
-
-            try
-            {
-                // get and display all students
-                List<Docent> docenten = Methodes.GetDocenten();
-                DisplayTeachers(docenten);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Something went wrong while loading the teachers: " + e.Message);
-            }
-        }
-
-        private void ShowDrankVoorraadPanel()
-        {
-            Methodes.ShowPanel(pnlDrankVoorraad);
-
-            try
-            {
-                // get and display all students
-                List<Drank> drankjes = Methodes.GetDrankjes();
-                DisplayDrankVoorraad(drankjes);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Something went wrong while loading the stock: " + e.Message);
-            }
-        }
-
-        private void DisplayDrankVoorraad(List<Drank> voorraad)
-        {
-            try
-            {
-                var orderedDrankList = voorraad.OrderBy(d => d.Voorraad).ToList();
-
-                // Clear existing items
-                listViewVoorraad.Items.Clear();
-
-                // Populate the ListView with drink stock information
-                foreach (Drank item in orderedDrankList)
-                {
-                    ListViewItem listViewItem = new ListViewItem(item.DrankNaam);
-                    listViewItem.SubItems.Add(item.IsAlcoholisch ? "Yes" : "No");
-                    listViewItem.SubItems.Add(item.Voorraad.ToString());
-                    listViewItem.SubItems.Add(item.Aantal_Geconsumeerd.ToString());
-                    listViewItem.SubItems.Add(item.Prijs.ToString("�0.00"));
-
-                    // Add stock status index as a subitem
-                    listViewItem.SubItems.Add((item.Voorraad < 10) ? "Insufficient" : "Sufficient");
-
-                    listViewVoorraad.Items.Add(listViewItem);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading drink stock information: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        public void ShowOmzetPanel()
-        {
-            Methodes.ShowPanel(pnlDrankOmzet);
-        }
-
-
-        private int GetOmzetTotalDrankjes()
-        {
-            OrderItemService orderItemService = new OrderItemService();
-            return orderItemService.CountOrderItemsByDate(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value);
-        }
-
-        public int GetAmountOfStudentsWithOrders()
-        {
-            BestellingService bestellingService = new BestellingService();
-            return bestellingService.GetAmountOfStudentsOmzet(dtpDrankOmzetStart.Value, dtpDrankOmzetEind.Value).Count;
-        }
-
-        private void DisplayActiviteiten(List<Activiteit> activiteiten)
-        {
-            // clear the listview before filling it
-            listViewActiviteiten.Items.Clear();
-
-            foreach (Activiteit activiteit in activiteiten)
-            {
-                ListViewItem li = new ListViewItem(activiteit.ActiviteitNaam);
-                li.SubItems.Add(activiteit.BeginTijd.ToString("dd-MM-yyyy HH:mm"));
-                li.SubItems.Add(activiteit.EindTijd.ToString("dd-MM-yyyy HH:mm"));
-
-                li.Tag = activiteit;   // link student object to listview item
-
-                listViewActiviteiten.Items.Add(li);
-
-            }
-            listViewActiviteiten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-        }
-
         private void DisplayBegeleiding(List<Docent> docenten)
         {
             listViewBegeleiders.Items.Clear();
@@ -670,23 +553,6 @@ namespace SomerenUI
 
             }
             listViewVrijeDocenten.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-        }
-
-        private void DisplayDrankjes(List<Drank> drankjes)
-        {
-            listViewBestellingenDrankjes.Items.Clear();
-            foreach (Drank drank in drankjes)
-            {
-                ListViewItem li = new ListViewItem(drank.DrankNaam);
-                li.Tag = drank;
-                li.SubItems.Add($"{drank.Prijs:C}");
-                li.SubItems.Add(drank.Type);
-                li.SubItems.Add(drank.Voorraad.ToString());
-                listViewBestellingenDrankjes.Items.Add(li);
-
-            }
-            listViewBestellingenDrankjes.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-
         }
 
         private List<Kamer> GetKamers()
@@ -1075,56 +941,6 @@ namespace SomerenUI
             labelPrijs.Text = 0.00.ToString("C", new CultureInfo("nl-NL"));
         }
 
-        private void DisplayOmzet()
-        {
-            listViewDrankOmzet.Items.Clear();
-            int studentsOrdered = GetAmountOfStudentsWithOrders();
-            double price = 2.00;
-            int totalDrinksSold = GetOmzetTotalDrankjes();
-            double turnover = totalDrinksSold * price;
-            ListViewItem li = new ListViewItem(Convert.ToString(totalDrinksSold));
-            li.SubItems.Add(turnover.ToString("C", new CultureInfo("nl-NL")));
-            li.SubItems.Add(Convert.ToString(studentsOrdered));
-            listViewDrankOmzet.Items.Add(li);
-            listViewDrankOmzet.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-        }
-
-        private void dashboardToolStripMenuItem1_Click(object sender, System.EventArgs e)
-        {
-            ShowDashboardPanel();
-
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void studentsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowStudentsPanel();
-        }
-
-        private void dashboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lecturersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowTeachersPanel();
-        }
-
-        private void roomsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowKamersPanel();
-        }
-
-        private void activitiesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void drankBestellingenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowDrankBestellingenPanel();
@@ -1144,46 +960,6 @@ namespace SomerenUI
         {
             ResetBestelling();
 
-        }
-        private void tagging()
-        {
-            //   foreach (OrderItem item in listViewTotaalBesteld) ;
-
-        }
-        private bool checkstock()
-        {
-            bool erisgenoeg = true;
-
-            foreach (ListViewItem orderItem in listViewTotaalBesteld.Items)
-            {
-                string dranknaam = orderItem.SubItems[0].Text;
-                int hoeveelheidbesteld = int.Parse(orderItem.SubItems[1].Text);
-
-                foreach (ListViewItem drinkItem in listViewBestellingenDrankjes.Items)
-                {
-                    if (drinkItem.SubItems[0].Text == dranknaam)
-                    {
-                        int aantaldrankover = int.Parse(drinkItem.SubItems[3].Text);
-
-
-                        if (hoeveelheidbesteld > aantaldrankover)
-                        {
-                            MessageBox.Show($"Er is niet genoeg {dranknaam} over, we hebben nog maar {aantaldrankover} ");
-                            erisgenoeg = false;
-                        }
-
-                        break;
-
-                    }
-
-
-
-
-                }
-
-
-            }
-            return erisgenoeg;
         }
 
         private void bttnPlaatsBestelling_Click(object sender, EventArgs e)
@@ -1249,27 +1025,10 @@ namespace SomerenUI
         {
             DisplayTotaalBesteld();
         }
-        private void bttnResetBestelling_Click(object sender, EventArgs e)
-        {
-            ResetBestelling();
 
-        }
         private void listViewBestellingenDrankjes_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-        }
-        private void drankBestellingenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShowDrankBestellingenPanel();
-        }
-        private void listViewBestellingenStudenten_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            ResetBestelling();
-            if (listViewBestellingenStudenten.SelectedItems.Count == 1)
-            {
-
-                lblNaamBesteller.Text = listViewBestellingenStudenten.SelectedItems[0].SubItems[1].Text;
-            }
         }
 
 
@@ -1379,95 +1138,6 @@ namespace SomerenUI
             return erisgenoeg;
         }
 
-        private void EditStudentButton_Click(object sender, EventArgs e)
-        {
-            if (listViewStudenten.SelectedItems.Count > 0)
-            {
-                // Get the selected item
-                ListViewItem selectedStudent = listViewStudenten.SelectedItems[0];
-
-                // Get the old data from the selected item
-                int studentId = int.Parse(selectedStudent.Text);
-                string studentNaam = selectedStudent.SubItems[1].Text;
-                string studentTelefoonnummer = selectedStudent.SubItems[2].Text;
-                string studentKlas = selectedStudent.SubItems[3].Text;
-                string studentKamer = selectedStudent.SubItems[4].Text;
-
-                // Get new data from textboxes
-                int newStudentId = int.Parse(StudentIdInput.Text);
-                string newStudentVoornaam = StudentVoornaamInput.Text;
-                string newStudentAchternaam = StudentAchternaamInput.Text;
-                string newStudentTelefoonnummer = StudentTelefoonnummerInput.Text;
-                string newStudentKlas = StudentKlasInput.Text;
-                string newStudentKamer = studentKamerComboBox.SelectedItem.ToString();
-
-                // Confirmation message
-                DialogResult result = MessageBox.Show($"Are you sure you want to edit:\n{studentNaam} with Id {studentId} with phonenumber {studentTelefoonnummer} in class {studentKlas} and room {studentKamer}" +
-                                                        $"\nto:\n" +
-                                                        $"{newStudentVoornaam} {newStudentAchternaam} with Id {newStudentId} with phonenumber {newStudentTelefoonnummer} in class {newStudentKlas} and room {newStudentKamer}?",
-                                           "Confirmation",
-                                           MessageBoxButtons.YesNo,
-                                           MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    // Call the DAO method to update the student
-                    StudentDao studentDao = new StudentDao();
-                    try
-                    {
-                        studentDao.UpdateStudent(studentId, newStudentId, newStudentVoornaam, newStudentAchternaam, newStudentTelefoonnummer, newStudentKlas, newStudentKamer);
-
-                        // Display a success message to the user
-                        MessageBox.Show("Student updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Clear input fields
-                        ClearStudentsInputFields();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Handle exceptions appropriately
-                        MessageBox.Show("Error updating Student: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else
-            {
-                // Inform the user to select a row in the ListView
-                MessageBox.Show("Please select a student to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            // Optionally, perform any additional actions
-            ShowStudentsPanel();
-        }
-
-        private void DeleteStudentButton_Click(object sender, EventArgs e)
-        {
-            if (listViewStudenten.SelectedItems.Count == 1)
-            {
-                // Vraag om bevestiging
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this student?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    // Verkrijg de geselecteerde studentId
-                    int selectedStudentId = int.Parse(listViewStudenten.SelectedItems[0].Text);
-
-                    StudentDao studentDao = new StudentDao();
-
-                    // Voer de verwijdering uit
-                    studentDao.DeleteStudent(selectedStudentId);
-
-                    // Wis tekstvakken
-                    ClearStudentsInputFields();
-
-                    // Vernieuw de weergegeven dranken
-                    ShowStudentsPanel();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select a student to delete.", "Wrong", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         private void activiteitenOverviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowActiviteitenPanel();
@@ -1530,16 +1200,17 @@ namespace SomerenUI
                     }
                 }
             }
-            
+
         }
-       private void listViewVrijeDocenten_DragEnter(object sender, DragEventArgs e)
+
+        private void listViewVrijeDocenten_DragEnter(object sender, DragEventArgs e)
         {
-           
-            e.Effect = DragDropEffects.Move; 
-          
+
+            e.Effect = DragDropEffects.Move;
 
 
-        } 
+
+        }
 
         private void listViewVrijeDocenten_ItemDrag(object sender, ItemDragEventArgs e)
         {
@@ -1548,10 +1219,10 @@ namespace SomerenUI
 
         private void listViewBegeleiders_DragEnter(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move; 
-         
+            e.Effect = DragDropEffects.Move;
 
-        } 
+
+        }
         private void listViewBegeleiders_ItemDrag(object sender, ItemDragEventArgs e)
         {
             listViewBegeleiders.DoDragDrop(e.Item, DragDropEffects.Move);
@@ -1574,9 +1245,9 @@ namespace SomerenUI
                     UpdateBegeleiders();
                 }
             }
-            
 
-           
+
+
         }
     }
 }
