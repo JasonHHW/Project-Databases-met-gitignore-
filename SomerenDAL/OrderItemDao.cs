@@ -20,7 +20,7 @@ namespace SomerenDAL
 
          public void AddBestelling(Bestelling bestelling)
         {
-            string query ="INSERT into [Bestelling] (BestellingId, StudentId, BestelDatum) VALUES (@BestellingId, @StudentId, @BestelDatum)";
+            string query ="INSERT into [Ordering] (orderId, studentId, orderDate) VALUES (@BestellingId, @StudentId, @BestelDatum)";
             SqlParameter[] sqlParameters = new SqlParameter[]
     {
         new SqlParameter("@BestellingId", bestelling.BestellingId),
@@ -33,7 +33,7 @@ namespace SomerenDAL
         }
         public void AddOrderitem(OrderItem item)
         {
-            string query = "INSERT into [OrderItem] (BestellingId, Dranknaam, Aantal, ItemId) VALUES (@BestellingId, @Dranknaam, @Aantal, @ItemId)";
+            string query = "INSERT into [OrderItem] (orderId, drinkName, quantity, itemId) VALUES (@BestellingId, @Dranknaam, @Aantal, @ItemId)";
             SqlParameter[] sqlParameters = new SqlParameter[4]
             {
         new SqlParameter("@BestellingId", item.BestellingId),
@@ -47,7 +47,7 @@ namespace SomerenDAL
 
         public int GetMaxOrderId()
         {
-            string query = "select max(BestellingID) as BestellingID from Bestelling";
+            string query = "SELECT MAX(orderId) AS [prderId] FROM [Ordering]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTablesforint(ExecuteSelectQuery(query, sqlParameters));
 

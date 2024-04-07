@@ -23,12 +23,12 @@ namespace SomerenDAL
             {
                 Student student = new Student()
                 {
-                    StudentId = (int)dr["StudentId"],
-                    FirstName = dr["Voornaam"].ToString(),
-                    LastName = dr["Achternaam"].ToString(),
-                    PhoneNumber = dr["Telefoonnummer"].ToString(),
-                    Class = dr["Klas"].ToString(),
-                    Room = dr["Kamer"].ToString()
+                    StudentId = (int)dr["studentId"],
+                    FirstName = dr["firstName"].ToString(),
+                    LastName = dr["lastName"].ToString(),
+                    PhoneNumber = dr["phoneNumber"].ToString(),
+                    Class = dr["class"].ToString(),
+                    Room = dr["room"].ToString()
                 };
                 students.Add(student);
             }

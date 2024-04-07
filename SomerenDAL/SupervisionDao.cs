@@ -12,7 +12,7 @@ namespace SomerenDAL
     {
         public List<Supervision> GetAllSupervisors()
         {
-            string query = "SELECT * FROM [Supervision]";
+            string query = "SELECT [activityId], [supervisor] FROM [Supervision]";
             SqlParameter[] parameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, parameters));
         }
@@ -25,8 +25,8 @@ namespace SomerenDAL
             {
                 Supervision supervisor = new Supervision()
                 {
-                    ActivityId = (int)dr["ActiviteitId"],
-                    Supervisor = (int)dr["Begeleider"]
+                    ActivityId = (int)dr["activityId"],
+                    Supervisor = (int)dr["supervisor"]
                 };
                 supervisors.Add(supervisor);
             }

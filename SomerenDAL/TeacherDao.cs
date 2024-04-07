@@ -14,14 +14,14 @@ namespace SomerenDAL
     {
         public List<Teacher> GetAllTeachers()
         {
-            string query = "SELECT * FROM [Teacher]";
+            string query = "SELECT [teacherId], [firstName], [lastName], [phoneNumber], [dateOfBirth], [room] FROM [Teacher]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
 
         public List<Teacher> GetSupervision(ActivityModel activity )
         {
-            string query = "SELECT firstName, lastName, teacherId from Supervision JOIN Teacher on teacherId = supervisor WHERE activityId = @ActivityId";
+            string query = "SELECT firstName, lastName, teacherId FROM Supervision JOIN Teacher on teacherId = supervisor WHERE activityId = @ActivityId";
             SqlParameter[] sqlParameters = new SqlParameter[1]
             { new SqlParameter("@ActivityId", activity.ActivityId) };
 
@@ -52,7 +52,7 @@ namespace SomerenDAL
 
         public List<Teacher>GetFreeTeachers(ActivityModel activity)
         {
-            string query = "SELECT distinct firstName, lastName, TeacherId FROM Supervision JOIN Docent ON teacherId = supervisor WHERE teacherId NOT IN (SELECT supervisor FROM Supervision WHERE ActivityId = @ActivityId)";
+            string query = "SELECT distinct firstName, lastName, teacherId FROM Supervision JOIN Teacher ON teacherId = supervisor WHERE teacherId NOT IN (SELECT supervisor FROM Supervision WHERE ActivityId = @ActivityId)";
             SqlParameter[] sqlParameters = new SqlParameter[1]
             { new SqlParameter("@ActivityId", activity.ActivityId) };
 

@@ -40,13 +40,15 @@ namespace SomerenUI
             ShowDashboardPanel();
         }
 
+
         //Exit
         private void exitToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             Application.Exit();
         }
 
-        //Student
+
+        //Student Overview
         private void ShowStudentsPanel()
         {
             //Displays Student Panel
@@ -57,6 +59,48 @@ namespace SomerenUI
                 // Get and display all students
                 List<Student> students = GetStudents();
                 DisplayStudents(students);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Something went wrong while loading the students: " + e.Message);
+            }
+        }
+
+        private void studentenOverviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowStudentsPanel();
+        }
+        private void DisplayStudents(List<Student> students)
+        {
+            // Clear the listview before filling it
+            listViewStudentsOverview.Items.Clear();
+
+            //Puts each student in the listview
+            foreach (Student student in students)
+            {
+                ListViewItem li = new ListViewItem(student.StudentId.ToString());
+
+                li.SubItems.Add(student.Name);
+                li.SubItems.Add(student.PhoneNumber);
+                li.SubItems.Add(student.Class);
+                li.SubItems.Add(student.Room);
+
+                listViewStudentsOverview.Items.Add(li);
+            }
+        }
+
+
+        // Manage Students
+        private void ShowManageStudentsPanel()
+        {
+            //Displays Manage Student Panel
+            Methodes.ShowPanel(pnlManageStudents);
+
+            try
+            {
+                // Get and display all students
+                List<Student> students = GetStudents();
+                DisplayStudentsMS(students);
                 FillStudentKamerComboBox();
             }
             catch (Exception e)
@@ -64,13 +108,14 @@ namespace SomerenUI
                 MessageBox.Show("Something went wrong while loading the students: " + e.Message);
             }
         }
+
         private List<Student> GetStudents()
         {
             StudentService studentService = new StudentService();
             List<Student> students = studentService.GetStudents();
             return students;
         }
-        private void DisplayStudents(List<Student> students)
+        private void DisplayStudentsMS(List<Student> students)
         {
             // Clear the listview before filling it
             listViewStudents.Items.Clear();
@@ -164,7 +209,7 @@ namespace SomerenUI
         }
         private void studentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowStudentsPanel();
+            ShowManageStudentsPanel();
         }
 
         //Student CRUD
@@ -336,10 +381,13 @@ namespace SomerenUI
             foreach (Teacher teacher in teachers)
             {
                 ListViewItem li = new ListViewItem(teacher.Name);
-
+                li.SubItems.Add(teacher.TeacherId.ToString());
+                li.SubItems.Add(teacher.PhoneNumber.ToString());
+                li.SubItems.Add(teacher.DateOfBirth.ToString("dd-MM-yyyy"));
                 li.Tag = teacher;   // link docent object to listview item
                 listViewTeachers.Items.Add(li);
             }
+            listViewTeachers.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
         private void lecturersToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -355,7 +403,7 @@ namespace SomerenUI
             try
             {
                 // get and display all students
-                List < ActivityModel> activiteiten = Methodes.GetActivities();
+                List<ActivityModel> activiteiten = Methodes.GetActivities();
                 DisplayActiviteiten(activiteiten);
 
             }
@@ -380,9 +428,9 @@ namespace SomerenUI
             foreach (ActivityModel activiteit in activiteiten)
             {
                 ListViewItem li = new ListViewItem(activiteit.ActivityName);
+                li.SubItems.Add(activiteit.ActivityId.ToString());
                 li.SubItems.Add(activiteit.StartTime.ToString("dd-MM-yyyy HH:mm"));
                 li.SubItems.Add(activiteit.EndTime.ToString("dd-MM-yyyy HH:mm"));
-
                 li.Tag = activiteit;   // link student object to listview item
 
                 listViewActivities.Items.Add(li);
@@ -672,7 +720,7 @@ namespace SomerenUI
             }
         }
 
-        //Kamers
+        // Rooms
         private void ShowRoomsPanel()
         {
             Methodes.ShowPanel(pnlKamers);
@@ -690,12 +738,6 @@ namespace SomerenUI
                 MessageBox.Show("Something went wrong while loading the rooms: " + e.Message);
             }
 
-        }
-        private List<Room> GetKamers()
-        {
-            RoomService roomService = new RoomService();
-            List<Room> rooms = roomService.GetRooms();
-            return rooms;
         }
         private void DisplayRooms(List<Room> rooms)
         {
@@ -1207,6 +1249,7 @@ namespace SomerenUI
         private void omzetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowOmzetPanel();
+            DisplayOmzet();
         }
         private void dtpDrankOmzetStart_ValueChanged(object sender, EventArgs e)
         {
@@ -1268,5 +1311,6 @@ namespace SomerenUI
             }
             return erisgenoeg;
         }
+
     }
 }

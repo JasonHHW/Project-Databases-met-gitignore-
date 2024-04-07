@@ -31,11 +31,11 @@ namespace SomerenDAL
             {
                 Drink drink = new Drink()
                 {
-                    IsAlcoholic = (bool)dr["IsAlcoholisch"],
-                    TotalConsumed = (int)dr["AantalGeconsumeerd"],
-                    Stock = (int)dr["VoorraadAantal"],
-                    DrinkName = dr["DrankNaam"].ToString(),
-                    Price = (decimal)dr["Prijs"]
+                    IsAlcoholic = (bool)dr["IsAlcoholic"],
+                    TotalConsumed = (int)dr["totalConsumed"],
+                    Stock = (int)dr["stockAmount"],
+                    DrinkName = dr["DrinkName"].ToString(),
+                    Price = (decimal)dr["price"]
 
                 };
                 drinks.Add(drink);
@@ -110,7 +110,7 @@ namespace SomerenDAL
         {
             try
             {
-                string query = "SELECT COUNT(*) FROM Drank WHERE drinkName = @DrinkName";
+                string query = "SELECT COUNT(*) FROM Drink WHERE drinkName = @DrinkName";
                 SqlParameter[] parameters =
                 {
                     new SqlParameter("@DrinkName", SqlDbType.VarChar) { Value = drinkName }
@@ -135,12 +135,12 @@ namespace SomerenDAL
                 ExecuteEditQuery(deleteOrderItemsQuery, orderItemsParameters);
 
                 // Delete the inventory information from the Stock table
-                string deleteStockQuery = "DELETE FROM Voorraad WHERE drinkName = @DrinkName";
+                string deleteStockQuery = "DELETE FROM Stock WHERE drinkName = @DrinkName";
                 SqlParameter[] stockParameters = { new SqlParameter("@DrinkName", drinkName) };
                 ExecuteEditQuery(deleteStockQuery, stockParameters);
 
                 // Then delete the record from the Drink table
-                string deleteDrinkQuery = "DELETE FROM Drank WHERE drinkName = @DrinkName";
+                string deleteDrinkQuery = "DELETE FROM Drink WHERE drinkName = @DrinkName";
                 SqlParameter[] drinkParameters = { new SqlParameter("@DrinkName", drinkName) };
                 ExecuteEditQuery(deleteDrinkQuery, drinkParameters);
 
