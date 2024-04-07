@@ -3,6 +3,7 @@ using SomerenModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,10 +31,29 @@ namespace SomerenService
             return orderItemDao.GetAllOrderItems();
         }
 
-        public List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)
+        private List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)
         {
-            return orderItemDao.GetOrderItemsByOrderDate(start, end);
+            return orderItemDao.GetOrderItemsByDate(start, end);
         }
 
+        public int RRGetTotalDrinksSold(DateTime start, DateTime end)
+        {
+            int total = 0;
+            foreach (OrderItem item in orderItemDao.GetOrderItemsByDate(start, end))
+            {
+                total += item.Aantal;
+            }
+            return total;
+        }
+
+        public decimal RRGetTurnover(DateTime start, DateTime end)
+        {
+            decimal turnover = 0;
+            foreach (OrderItem item in orderItemDao.GetOrderItemsByDate(start, end))
+            {
+                turnover += item.Aantal * item.Prijs;
+            }
+            return turnover;
+        }
     }
 }

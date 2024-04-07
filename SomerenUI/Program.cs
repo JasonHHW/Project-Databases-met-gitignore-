@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace SomerenUI
@@ -11,6 +12,9 @@ namespace SomerenUI
         [STAThread]
         static void Main()
         {
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("nl-NL");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("nl-NL");
+
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

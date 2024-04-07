@@ -20,7 +20,7 @@ namespace SomerenDAL
 
          public void AddBestelling(Bestelling bestelling)
         {
-            string query ="INSERT into [Bestelling] (BestellingId, StudentId, BestelDatum) VALUES (@BestellingId, @StudentId, @BestelDatum)";
+            string query ="INSERT into [Ordering] (orderId, studentId, orderDate) VALUES (@BestellingId, @StudentId, @BestelDatum)";
             SqlParameter[] sqlParameters = new SqlParameter[]
     {
         new SqlParameter("@BestellingId", bestelling.BestellingId),
@@ -33,8 +33,8 @@ namespace SomerenDAL
         }
         public void AddOrderitem(OrderItem item)
         {
-            string query = "INSERT into [OrderItem] (BestellingId, Dranknaam, Aantal, ItemId) VALUES (@BestellingId, @Dranknaam, @Aantal, @ItemId)";
-            SqlParameter[] sqlParameters = new SqlParameter[]
+            string query = "INSERT into [OrderItem] (orderId, drinkName, quantity, itemId) VALUES (@BestellingId, @Dranknaam, @Aantal, @ItemId)";
+            SqlParameter[] sqlParameters = new SqlParameter[4]
             {
         new SqlParameter("@BestellingId", item.BestellingId),
         new SqlParameter("@Dranknaam", item.DrankNaam),
@@ -47,7 +47,7 @@ namespace SomerenDAL
 
         public int GetMaxOrderId()
         {
-            string query = "select max(BestellingID) as BestellingID from Bestelling";
+            string query = "SELECT MAX(orderId) AS [prderId] FROM [Ordering]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTablesforint(ExecuteSelectQuery(query, sqlParameters));
 
@@ -62,34 +62,55 @@ namespace SomerenDAL
             {
                 OrderItem orderItem = new OrderItem()
                 {
-                    ItemId = (int)dr["ItemId"],
-                    BestellingId = (int)dr["BestellingId"],
-                    DrankNaam = dr["DrankNaam"].ToString(),
-                    Aantal = (int)dr["Aantal"]
+                    ItemId = (int)dr["itemId"],
+                    BestellingId = (int)dr["orderId"],
+                    DrankNaam = dr["drinkName"].ToString(),
+                    Aantal = (int)dr["quantity"],
+                    Prijs = (decimal)dr["price"]
                 };
                 orderItems.Add(orderItem);
             }
             return orderItems;
         }
+
+        public List<OrderItem> RRReadTables(DataTable dataTable) // RR stands for RevenueReport
+        {
+            List<OrderItem> orderItems = new List<OrderItem>();
+
+            foreach (DataRow dr in dataTable.Rows)
+            {
+                OrderItem orderItem = new OrderItem()
+                {
+                    ItemId = (int)dr["itemId"],
+                    DrankNaam = dr["drinkName"].ToString(),
+                    Aantal = (int)dr["quantity"],
+                    Prijs = (decimal)dr["price"]
+                };
+                orderItems.Add(orderItem);
+            }
+            return orderItems;
+        }
+
         public int ReadTablesforint(DataTable dataTable)
         {
             
                 DataRow dr = dataTable.Rows[0];
 
-                return (int)dr["BestellingID"];
+                return (int)dr["orderID"];
                   
          
         }
 
-        public List<OrderItem> GetOrderItemsByOrderDate(DateTime start, DateTime end)
+        public List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)
         {
-            string query = "SELECT * FROM [OrderItem] JOIN [Bestelling] ON Bestelling.BestellingId = OrderItem.BestellingId WHERE [BestelDatum] >= @start AND [BestelDatum] <= @eind";
+            // query selects the total and price for each drink and groups it by the name of the drink
+            string query = "SELECT SUM([quantity]) AS [quantity], [itemId], [Drink].[price] AS [price], OrderItem.[drinkName] FROM [OrderItem] JOIN [Ordering] ON Ordering.orderId = OrderItem.orderId JOIN [Drink] ON OrderItem.drinkName = Drink.drinkName WHERE [orderDate] BETWEEN @start AND @eind GROUP BY OrderItem.drinkName, Drink.price, quantity, OrderItem.itemId";
             SqlParameter[] sqlParameters = new SqlParameter[2];
             sqlParameters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParameters[1] = new SqlParameter("@eind", SqlDbType.DateTime);
-            sqlParameters[0].Value = start;
-            sqlParameters[1].Value = end.AddHours(23).AddMinutes(59).AddSeconds(59);
-            return ReadTables(ExecuteSelectQuery(query, sqlParameters));
+            sqlParameters[0].Value = start.Date;
+            sqlParameters[1].Value = end.Date.AddDays(1);
+           return RRReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
 
         

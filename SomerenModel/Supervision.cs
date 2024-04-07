@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SomerenModel
 {
-    public class Deelname
+    public class Supervision
     {
-        public int ActiviteitId { get; set; }
-        public int Deelnemer {  get; set; }
+        public int ActivityId { get; set; }
+        public int Supervisor {  get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace SomerenUI
             {
                 ListViewItem li = new ListViewItem(student.StudentId.ToString());
                 li.Tag = student;   // link student object to listview item
-                li.SubItems.Add(student.Naam);
+                li.SubItems.Add(student.Name);
                 listView.Items.Add(li);
 
             }
