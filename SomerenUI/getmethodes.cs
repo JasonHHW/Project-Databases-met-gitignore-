@@ -11,11 +11,11 @@ namespace SomerenUI
     public static partial class Methodes 
     {
 
-        public static List<Docent> GetDocenten()
+        public static List<Teacher> GetTeachers()
         {
-            DocentService docentService = new DocentService();
-            List<Docent> docenten = docentService.GetDocenten();
-            return docenten;
+            TeacherService teacherService = new TeacherService();
+            List<Teacher> teachers = teacherService.GetTeachers();
+            return teachers;
         }
         public static  List<Student> GetStudents()
         {
@@ -23,36 +23,36 @@ namespace SomerenUI
             List<Student> students = studentService.GetStudents();
             return students;
         }
-        public static List<Kamer> GetKamers()
+        public static List<Room> GetRooms()
         {
-            KamerService KamerService = new KamerService();
-            List<Kamer> kamers = KamerService.GetKamers();
-            return kamers;
+            RoomService RoomService = new RoomService();
+            List<Room> rooms = RoomService.GetRooms();
+            return rooms;
         }
-        public static List<Activiteit> GetActiviteiten()
+        public static List<ActivityModel> GetActivities()
         {
-            ActiviteitService activiteitService = new ActiviteitService();
-            List<Activiteit> activiteiten = activiteitService.GetActiviteiten();
-            return activiteiten;
+            ActivityService activityService = new ActivityService();
+            List<ActivityModel> activities = activityService.GetActivities();
+            return activities;
         }
-        public static List<Drank> GetDrankjes()
+        public static List<Drink> GetDrinks()
         {
-            DrankService drankService = new DrankService();
-            List<Drank> drankjes = drankService.GetDrankjes();
-            return drankjes;
+            DrinkService drinkService = new DrinkService();
+            List<Drink> drinks = drinkService.GetDrinks();
+            return drinks;
         }
 
-        public static List<Docent> GetBegeleiding(Activiteit activiteit)
+        public static List<Teacher> GetSupervisors(ActivityModel activiteit)
         {
-            DocentService docentService = new DocentService();
-            List<Docent> docenten = docentService.GetBegeleiders(activiteit);
-            return docenten;
+            TeacherService teacherService = new TeacherService();
+            List<Teacher> teachers = teacherService.GetSupervisors(activiteit);
+            return teachers;
         }
-        public static List<Docent> GetVrijeDocent(Activiteit activiteit)
+        public static List<Teacher> GetFreeTeachers(ActivityModel activity)
         {
-            DocentService docentService = new DocentService();
-            List<Docent> docenten = docentService.GetVrijeDocenten(activiteit);
-            return docenten;
+            TeacherService teacherService = new TeacherService();
+            List<Teacher> teachers = teacherService.GetFreeTeachers(activity);
+            return teachers;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace SomerenDAL
     {
         public List<Student> GetAllStudents()
         {
-            string query = "SELECT [StudentId], [Voornaam], [Achternaam], [Telefoonnummer], [Klas], [Kamer] FROM [Student]";
+            string query = "SELECT [studentId], [firstName], [lastName], [phoneNumber], [class], [room] FROM [Student]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
@@ -24,11 +24,11 @@ namespace SomerenDAL
                 Student student = new Student()
                 {
                     StudentId = (int)dr["StudentId"],
-                    Voornaam = dr["Voornaam"].ToString(),
-                    Achternaam = dr["Achternaam"].ToString(),
-                    Telefoonnummer = dr["Telefoonnummer"].ToString(),
-                    Klas = dr["Klas"].ToString(),
-                    Kamer = dr["Kamer"].ToString()
+                    FirstName = dr["Voornaam"].ToString(),
+                    LastName = dr["Achternaam"].ToString(),
+                    PhoneNumber = dr["Telefoonnummer"].ToString(),
+                    Class = dr["Klas"].ToString(),
+                    Room = dr["Kamer"].ToString()
                 };
                 students.Add(student);
             }
@@ -39,7 +39,7 @@ namespace SomerenDAL
         {
             try
             {
-                string query = "SELECT COUNT(*) FROM Student WHERE StudentId = @StudentId";
+                string query = "SELECT COUNT(*) FROM Student WHERE studentId = @StudentId";
                 SqlParameter[] parameters =
                 {
                     new SqlParameter("@StudentId", SqlDbType.VarChar) { Value = studentId }
@@ -54,7 +54,7 @@ namespace SomerenDAL
             }
         }
 
-        public void AddStudent(int studentId, string studentVoornaam, string studentAchternaam, string studentTelefoonnummer, string studentKlas, string studentKamer)
+        public void AddStudent(int studentId, string studentFirstName, string studentLastName, string studentPhoneNumber, string studentClass, string studentRoom)
         {
             try
             {
@@ -64,17 +64,17 @@ namespace SomerenDAL
                 }
 
                 // Define your SQL query for adding a student
-                string query = "INSERT INTO Student (StudentId, Voornaam, Achternaam, Telefoonnummer, Klas, Kamer) VALUES (@StudentId, @StudentVoornaam, @StudentAchternaam, @StudentTelefoonnummer, @StudentKlas, @StudentKamer);";
+                string query = "INSERT INTO Student (StudentId, fistName, lastName, phoneNumber, class, room) VALUES (@StudentId, @StudentFirstName, @StudentLastName, @StudentPhoneNumber, @StudentClass, @StudentRoom);";
 
                 // Define parameters for your query
                 SqlParameter[] parameters =
                 {
                     new SqlParameter("@StudentId", SqlDbType.Int) { Value = studentId },
-                    new SqlParameter("@StudentVoornaam", SqlDbType.VarChar) { Value = studentVoornaam },
-                    new SqlParameter("@StudentAchternaam", SqlDbType.VarChar) { Value = studentAchternaam },
-                    new SqlParameter("@StudentTelefoonnummer", SqlDbType.VarChar) { Value = studentTelefoonnummer },
-                    new SqlParameter("@StudentKlas", SqlDbType.VarChar) { Value = studentKlas },
-                    new SqlParameter("@StudentKamer", SqlDbType.VarChar) { Value = studentKamer }
+                    new SqlParameter("@StudentFirstName", SqlDbType.VarChar) { Value = studentFirstName },
+                    new SqlParameter("@StudentLastName", SqlDbType.VarChar) { Value = studentLastName },
+                    new SqlParameter("@StudentPhoneNumber", SqlDbType.VarChar) { Value = studentPhoneNumber },
+                    new SqlParameter("@StudentClass", SqlDbType.VarChar) { Value = studentClass },
+                    new SqlParameter("@StudentRoom", SqlDbType.VarChar) { Value = studentRoom }
                 };
 
                 // Execute the query
@@ -92,12 +92,12 @@ namespace SomerenDAL
 
             try
             {
-                string query = "SELECT KamerCode FROM Kamer WHERE IsEenPersoons = 0"; // Fetch student rooms where IsEenPersoons is false
+                string query = "SELECT roomCode FROM Room WHERE isSingleRoom = 0"; // Fetch student rooms where IsEenPersoons is false
                 DataTable result = ExecuteSelectQuery(query);
 
                 foreach (DataRow row in result.Rows)
                 {
-                    studentRooms.Add(row["KamerCode"].ToString());
+                    studentRooms.Add(row["roomCode"].ToString());
                 }
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace SomerenDAL
             return studentRooms;
         }
 
-        public void UpdateStudent(int studentId, int newStudentId, string newStudentVoornaam, string newStudentAchternaam, string newStudentTelefoonnummer, string newStudentKlas, string newStudentKamer)
+        public void UpdateStudent(int studentId, int newStudentId, string newStudentFirstName, string newStudentLastName, string newStudentPhoneNumber, string newStudentClass, string newStudentRoom)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace SomerenDAL
                 }
 
                 // Update the student
-                string updateQuery = "UPDATE Student SET StudentId = @NewStudentId, Voornaam = @Voornaam, Achternaam = @Achternaam, Telefoonnummer = @Telefoonnummer, Klas = @Klas, Kamer = @Kamer " +
+                string updateQuery = "UPDATE Student SET studentId = @NewStudentId, firstName = @FirstName, lastName = @LastName, phoneNumber = @PhoneNumber, class = @Class, room = @room " +
                                      "WHERE StudentId = @OldStudentId";
 
                 // Define parameters for the query
@@ -126,11 +126,11 @@ namespace SomerenDAL
                 {
                     new SqlParameter("@OldStudentId", SqlDbType.Int) { Value = studentId },
                     new SqlParameter("@NewStudentId", SqlDbType.Int) { Value = newStudentId },
-                    new SqlParameter("@Voornaam", SqlDbType.VarChar) { Value = newStudentVoornaam },
-                    new SqlParameter("@Achternaam", SqlDbType.VarChar) { Value = newStudentAchternaam },
-                    new SqlParameter("@Telefoonnummer", SqlDbType.VarChar) { Value = newStudentTelefoonnummer },
-                    new SqlParameter("@Klas", SqlDbType.VarChar) { Value = newStudentKlas },
-                    new SqlParameter("@Kamer", SqlDbType.VarChar) { Value = newStudentKamer }
+                    new SqlParameter("@FirstName", SqlDbType.VarChar) { Value = newStudentFirstName },
+                    new SqlParameter("@LastName", SqlDbType.VarChar) { Value = newStudentLastName },
+                    new SqlParameter("@PhoneNumber", SqlDbType.VarChar) { Value = newStudentPhoneNumber },
+                    new SqlParameter("@Class", SqlDbType.VarChar) { Value = newStudentClass },
+                    new SqlParameter("@Room", SqlDbType.VarChar) { Value = newStudentRoom }
                 };
 
                 // Execute the update query
@@ -146,17 +146,17 @@ namespace SomerenDAL
             try
             {
                 // Delete student where studentId = studentId
-                string deleteStudentQuery = "DELETE FROM Student WHERE StudentId = @StudentId";
+                string deleteStudentQuery = "DELETE FROM Student WHERE studentId = @StudentId";
                 SqlParameter[] studentParameters = { new SqlParameter("@StudentId", studentId) };
                 ExecuteEditQuery(deleteStudentQuery, studentParameters);
 
                 // Succesmelding of andere logica na succesvol verwijderen
-                Console.WriteLine("Student + bestelling- en activiteit informatie succesvol verwijderd.");
+                Console.WriteLine("Student + order- and activity information deleted successfully");
             }
             catch (Exception ex)
             {
                 // Foutafhandeling
-                Console.WriteLine("Er is een fout opgetreden bij het verwijderen van de student en gekoppelde informatie: " + ex.Message);
+                Console.WriteLine("There was an error while deleting the student and associated information: " + ex.Message);
             }
         }
     }

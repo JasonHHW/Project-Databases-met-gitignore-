@@ -13,7 +13,7 @@ namespace SomerenDAL
     {
         public List<Bestelling> GetAllBestellingen()
         {
-            string query = "SELECT * FROM [Bestelling]";
+            string query = "SELECT * FROM [Ordering]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTables(ExecuteSelectQuery(query, sqlParameters));
         }
