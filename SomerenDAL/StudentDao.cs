@@ -64,7 +64,7 @@ namespace SomerenDAL
                 }
 
                 // Define your SQL query for adding a student
-                string query = "INSERT INTO Student (StudentId, fistName, lastName, phoneNumber, class, room) VALUES (@StudentId, @StudentFirstName, @StudentLastName, @StudentPhoneNumber, @StudentClass, @StudentRoom);";
+                string query = "INSERT INTO Student (studentId, firstName, lastName, phoneNumber, class, room) VALUES (@StudentId, @StudentFirstName, @StudentLastName, @StudentPhoneNumber, @StudentClass, @StudentRoom);";
 
                 // Define parameters for your query
                 SqlParameter[] parameters =

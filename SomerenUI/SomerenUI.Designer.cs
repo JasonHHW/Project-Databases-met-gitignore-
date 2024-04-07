@@ -67,6 +67,7 @@
             listViewTeachers = new System.Windows.Forms.ListView();
             columnHeader1 = new System.Windows.Forms.ColumnHeader();
             columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            columnHeader13 = new System.Windows.Forms.ColumnHeader();
             columnHeader3 = new System.Windows.Forms.ColumnHeader();
             pictureBox3 = new System.Windows.Forms.PictureBox();
             DocentenLab = new System.Windows.Forms.Label();
@@ -183,7 +184,6 @@
             pictureBox6 = new System.Windows.Forms.PictureBox();
             lblDrankBestellingen = new System.Windows.Forms.Label();
             lblDashboard = new System.Windows.Forms.Label();
-            columnHeader13 = new System.Windows.Forms.ColumnHeader();
             menuStrip1.SuspendLayout();
             pnlDashboard.SuspendLayout();
             pnlStudents.SuspendLayout();
@@ -492,6 +492,10 @@
             // 
             columnHeader2.Text = "Id";
             // 
+            // columnHeader13
+            // 
+            columnHeader13.Text = "PhoneNumber";
+            // 
             // columnHeader3
             // 
             columnHeader3.Text = "Date of Birth";
@@ -770,9 +774,9 @@
             pnlManageSupervisors.Controls.Add(pictureBox4);
             pnlManageSupervisors.Controls.Add(listViewActivitiesMAS);
             pnlManageSupervisors.Controls.Add(ActiviteitenLabel);
-            pnlManageSupervisors.Location = new System.Drawing.Point(13, 380);
+            pnlManageSupervisors.Location = new System.Drawing.Point(13, 127);
             pnlManageSupervisors.Name = "pnlManageSupervisors";
-            pnlManageSupervisors.Size = new System.Drawing.Size(258, 63);
+            pnlManageSupervisors.Size = new System.Drawing.Size(728, 336);
             pnlManageSupervisors.TabIndex = 5;
             pnlManageSupervisors.Visible = false;
             // 
@@ -809,7 +813,6 @@
             listViewFreeTeachers.UseCompatibleStateImageBehavior = false;
             listViewFreeTeachers.View = System.Windows.Forms.View.Details;
             listViewFreeTeachers.ItemDrag += listViewVrijeDocenten_ItemDrag;
-            listViewFreeTeachers.SelectedIndexChanged += activitiesToolStripMenuItem_Click;
             listViewFreeTeachers.DragDrop += listViewVrijeDocenten_DragDrop;
             listViewFreeTeachers.DragEnter += listViewVrijeDocenten_DragEnter;
             // 
@@ -1526,10 +1529,6 @@
             lblDashboard.Size = new System.Drawing.Size(208, 15);
             lblDashboard.TabIndex = 0;
             lblDashboard.Text = "Welcome to the Someren Application!";
-            // 
-            // columnHeader13
-            // 
-            columnHeader13.Text = "PhoneNumber";
             // 
             // SomerenUI
             // 
