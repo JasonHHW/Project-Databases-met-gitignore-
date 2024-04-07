@@ -26,33 +26,38 @@ namespace SomerenDAL
             {
                 Bestelling bestelling = new Bestelling()
                 {
-                    BestellingId = (int)dr["BestellingId"],
+                    BestellingId = (int)dr["orderId"],
                     StudentId = (int)dr["StudentId"],
-                    BestelDatum = (DateTime)dr["BestelDatum"]
+                    BestelDatum = (DateTime)dr["orderDate"]
                 };
                 bestellingen.Add(bestelling);
             }
             return bestellingen;
         }
 
-        public List<Bestelling> ReadStudentsOrdered(DataTable dataTable)
+        public int ReadStudentsOrdered(DataTable dataTable)
         {
-            List<Bestelling> studenten = new List<Bestelling>();
-
-            foreach (DataRow dr in dataTable.Rows)
+            if (dataTable.Rows.Count > 0)
             {
-                Bestelling student = new Bestelling()
+                int studentsOrdered = 0;
+                foreach (DataRow dr in dataTable.Rows)
                 {
-                    StudentId = (int)dr["StudentId"]
-                };
-                studenten.Add(student);
+                    if ((int)dr["Students"] != null)
+                    {
+                        studentsOrdered = (int)dr["Students"];
+                    }
+                }
+                return studentsOrdered;
             }
-            return studenten;
+            else
+            {
+                throw new Exception();
+            }
         }
 
-        public List<Bestelling> IndividualStudentsOrdered(DateTime start, DateTime end)
+        public int IndividualStudentsOrdered(DateTime start, DateTime end)
         {
-            string query = "SELECT DISTINCT[StudentId] FROM [Bestelling] WHERE [BestelDatum] BETWEEN @start AND @end";
+            string query = "SELECT COUNT(DISTINCT[studentId]) AS [Students] FROM [Ordering] WHERE [orderDate] BETWEEN @start AND @end";
             SqlParameter[] sqlParamaters = new SqlParameter[2];
             sqlParamaters[0] = new SqlParameter("@start", SqlDbType.DateTime);
             sqlParamaters[1] = new SqlParameter("@end", SqlDbType.DateTime);

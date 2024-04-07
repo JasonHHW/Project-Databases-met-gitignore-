@@ -17,9 +17,24 @@ namespace SomerenService
             deelnameDao = new DeelnameDao();
         }
 
-        public List<Deelname> GetDeelnemers()
+        public List<Student> GetDeelnemersFromActiviteitId(Activiteit act)
         {
-            return deelnameDao.GetAllDeelnemers();
+            return deelnameDao.GetAllDeelnemersFromActiviteitId(act);
+        }
+
+        public List<Student> GetNietDeelnemers(Activiteit act)
+        {
+            return deelnameDao.GetNonParticipatingStudents(act);
+        }
+
+        public void RemoveParticipatingStudent(Activiteit act, Student student)
+        {
+            deelnameDao.RemoveParticipatingStudent(act, student);
+        }
+
+        public void AddParticipatingStudent(Activiteit act, Student student)
+        {
+            deelnameDao.AddParticipatingStudent(act, student);
         }
     }
 }
