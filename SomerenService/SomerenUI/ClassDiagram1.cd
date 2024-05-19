@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SomerenUI.Methodes">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>DrankMethodes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SomerenUI.SomerenUI" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>jXmOfrMcHCAylWytSUSsTAn+gFwAYMSh93Jw7rJSFRw=</HashCode>
+      <FileName>SomerenUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SomerenService.OrderItemService">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="SomerenDAL.OrderItemDao">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="SomerenModel.OrderItem">
+    <Position X="2" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
