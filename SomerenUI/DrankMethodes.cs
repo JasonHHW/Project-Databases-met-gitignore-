@@ -13,14 +13,14 @@ namespace SomerenUI
     {
         public static void DisplayStudents(List<Student> students, ListView listView)
         {
-            // clear the listview before filling it
+            // verwijdert alles uit de listview voordat hij items toevoegt.
             listView.Items.Clear();
 
 
             foreach (Student student in students)
-            {
+            {  // verbindt  elke student in students met een listview item en weergeeft zijn naam in de listtview
                 ListViewItem li = new ListViewItem(student.StudentId.ToString());
-                li.Tag = student;   // link student object to listview item
+                li.Tag = student;  
                 li.SubItems.Add(student.Name);
                 listView.Items.Add(li);
 

@@ -52,7 +52,7 @@ namespace SomerenDAL
 
         public List<Teacher>GetFreeTeachers(ActivityModel activity)
         {
-            string query = "SELECT distinct firstName, lastName, teacherId FROM Supervision JOIN Teacher ON teacherId = supervisor WHERE teacherId NOT IN (SELECT supervisor FROM Supervision WHERE ActivityId = @ActivityId)";
+            string query = "SELECT distinct firstName, lastName, teacherId FROM Teacher WHERE teacherId NOT IN (SELECT supervisor FROM Supervision WHERE ActivityId = @ActivityId)";
             SqlParameter[] sqlParameters = new SqlParameter[1]
             { new SqlParameter("@ActivityId", activity.ActivityId) };
 

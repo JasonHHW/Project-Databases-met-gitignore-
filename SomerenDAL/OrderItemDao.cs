@@ -50,6 +50,7 @@ namespace SomerenDAL
             string query = "SELECT MAX(orderId) AS [orderId] FROM [Ordering]";
             SqlParameter[] sqlParameters = new SqlParameter[0];
             return ReadTablesforint(ExecuteSelectQuery(query, sqlParameters));
+            
 
         }
        
@@ -94,11 +95,13 @@ namespace SomerenDAL
         public int ReadTablesforint(DataTable dataTable)
         {
             
+            
                 DataRow dr = dataTable.Rows[0];
 
-                return (int)dr["orderID"];
-                  
-         
+            if (dr["orderID"] == DBNull.Value) { return 0; }
+          
+            else return (int)dr["orderID"];
+
         }
 
         public List<OrderItem> GetOrderItemsByDate(DateTime start, DateTime end)

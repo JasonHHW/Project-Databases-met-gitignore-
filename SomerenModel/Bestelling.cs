@@ -15,7 +15,7 @@ namespace SomerenModel
 
         public override string ToString()
         {
-            return ($"besellingsid:{BestellingId}, studentid: {StudentId}, besteldatum: {BestelDatum}");
+            return ($"bestellingsid:{BestellingId}, studentid: {StudentId}, besteldatum: {BestelDatum}");
         }
     }
 }
